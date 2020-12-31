@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Awesome Vibes</string>
+    <string name="base_url_service">https://itunes.apple.com/</string>
+    <string name="next_label">Next</string>
+</resources>

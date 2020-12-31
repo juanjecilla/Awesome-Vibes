@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/search">
+
+    <fragment
+        android:id="@+id/search"
+        android:name="com.scallop.awesomevibes.ui.search.SearchFragment"
+        android:label="fragment_sarch"
+        tools:layout="@layout/fragment_search" >
+
+        <action
+            android:id="@+id/searchArtist"
+            app:destination="@id/artists"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/search" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/artists"
+        android:name="com.scallop.awesomevibes.ui.artists.ArtistsFragment"
+        android:label="fragment_artists"
+        tools:layout="@layout/fragment_artists" >
+
+        <argument
+            android:name="search_name"
+            android:defaultValue=""
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/albums"
+        android:name="com.scallop.awesomevibes.ui.albums.AlbumsFragment"
+        android:label="fragment_albums"
+        tools:layout="@layout/fragment_albums" >
+
+        <argument
+            android:name="search_artist"
+            android:defaultValue=""
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>
