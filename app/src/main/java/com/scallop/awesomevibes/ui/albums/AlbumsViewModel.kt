@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.scallop.awesomevibes.common.BaseViewModel
+import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Artist
 import com.scallop.awesomevibes.entities.Data
 import com.scallop.awesomevibes.entities.Status
+import com.scallop.awesomevibes.mappers.AlbumsMapper
 import com.scallop.awesomevibes.mappers.ArtistMapper
+import com.scallop.domain.usecases.GetAlbumsUseCase
 import com.scallop.domain.usecases.GetArtistsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -16,21 +19,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlbumsViewModel(
-    private val mUseCase: GetArtistsUseCase,
-    private val mMapper: ArtistMapper
+    private val mUseCase: GetAlbumsUseCase,
+    private val mMapper: AlbumsMapper
 ) : BaseViewModel() {
 
-    private val _data = MutableLiveData<Data<List<Artist>>>()
-    val data: LiveData<Data<List<Artist>>> get() = _data
+    private val _data = MutableLiveData<Data<List<Album>>>()
+    val data: LiveData<Data<List<Album>>> get() = _data
 
     fun getAlbums(searchName: String, page: Int = 0) {
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getArtists(searchName, page)
+                mUseCase.getAlbums(searchName, page)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapArtist(it.results))
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapAlbum(it.results))
             }.collect()
         }
     }

@@ -4,17 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.scallop.awesomevibes.R
-import com.scallop.awesomevibes.databinding.ItemArtistBinding
+import com.scallop.awesomevibes.databinding.ItemAlbumBinding
+import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Artist
+import com.scallop.awesomevibes.ui.commons.OnItemClick
 
-class AlbumsAdapter :
+class AlbumsAdapter(private val mListener: OnItemClick<Album>) :
     RecyclerView.Adapter<AlbumsAdapter.ArtistsListViewHolder>() {
 
-    private var mData = mutableListOf<Artist>()
+    private var mData = mutableListOf<Album>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistsListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_artist, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false)
         return ArtistsListViewHolder(view)
     }
 
@@ -26,7 +29,7 @@ class AlbumsAdapter :
         holder.bind(mData[position])
     }
 
-    fun updateList(list: List<Artist>) {
+    fun updateList(list: List<Album>) {
         if (list.isNotEmpty()) {
             val prevCount = itemCount
             mData.addAll(list)
@@ -36,14 +39,20 @@ class AlbumsAdapter :
 
     inner class ArtistsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private lateinit var mItem: Artist
-        private val mBinding = ItemArtistBinding.bind(itemView)
+        private lateinit var mItem: Album
+        private val mBinding = ItemAlbumBinding.bind(itemView)
 
-        fun bind(item: Artist) {
+        init {
+            itemView.setOnClickListener { mListener.onItemClicked(mItem) }
+        }
+
+        fun bind(item: Album) {
             mItem = item
 
             with(mBinding) {
-                artistName.text = item.artistName
+                albumImage.load(item.artworkUrl100)
+                albumName.text = item.collectionName
+                albumRelease.text = item.releaseDate
             }
         }
     }

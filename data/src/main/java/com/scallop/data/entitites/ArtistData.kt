@@ -12,7 +12,7 @@ data class ArtistData(
      @Json(name = "artistLinkUrl") @SerializedName("artistLinkUrl") val artistLinkUrl: String,
      @Json(name = "artistName") @SerializedName("artistName") val artistName: String,
      @Json(name = "artistType") @SerializedName("artistType") val artistType: String,
-     @Json(name = "primaryGenreId") @SerializedName("primaryGenreId") val primaryGenreId: Int,
-     @Json(name = "primaryGenreName") @SerializedName("primaryGenreName") val primaryGenreName: String,
+     @Json(name = "primaryGenreId") @SerializedName("primaryGenreId") val primaryGenreId: Int?,
+     @Json(name = "primaryGenreName") @SerializedName("primaryGenreName") val primaryGenreName: String?,
      @Json(name = "wrapperType") @SerializedName("wrapperType") val wrapperType: String
 )

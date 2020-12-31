@@ -3,9 +3,11 @@ package com.scallop.data.mappers
 import com.scallop.data.entitites.AlbumData
 import com.scallop.data.entitites.ArtistData
 import com.scallop.data.entitites.ItunesApiResponseData
+import com.scallop.data.entitites.SongData
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
 import com.scallop.domain.entities.ItunesApiResponseEntity
+import com.scallop.domain.entities.SongEntity
 
 class MusicDataEntityMapper constructor() {
 
@@ -14,9 +16,9 @@ class MusicDataEntityMapper constructor() {
         results = mapArtistsToEntity(data.results)
     )
 
-    fun mapArtistsToEntity(results: List<ArtistData>) = results.map { mapToEntity(it) }
+    private fun mapArtistsToEntity(results: List<ArtistData>) = results.map { mapToEntity(it) }
 
-    fun mapToEntity(data: ArtistData) = ArtistEntity(
+    private fun mapToEntity(data: ArtistData) = ArtistEntity(
         artistId = data.artistId,
         amgArtistId = data.amgArtistId,
         artistLinkUrl = data.artistLinkUrl,
@@ -27,14 +29,14 @@ class MusicDataEntityMapper constructor() {
         wrapperType = data.wrapperType
     )
 
-    fun mapToEntity(data: ItunesApiResponseData<AlbumData>)= ItunesApiResponseEntity(
+    fun mapToEntity(data: ItunesApiResponseData<AlbumData>) = ItunesApiResponseEntity(
         resultCount = data.resultCount,
         results = mapToEntity(data.results)
     )
 
-    fun mapToEntity(results: List<AlbumData>) = results.map { mapToEntity(it) }
+    private fun mapToEntity(results: List<AlbumData>) = results.map { mapToEntity(it) }
 
-    fun mapToEntity(data: AlbumData) = AlbumEntity(
+    private fun mapToEntity(data: AlbumData) = AlbumEntity(
         amgArtistId = data.amgArtistId,
         artistId = data.artistId,
         artistName = data.artistName,
@@ -54,6 +56,42 @@ class MusicDataEntityMapper constructor() {
         primaryGenreName = data.primaryGenreName,
         releaseDate = data.releaseDate,
         trackCount = data.trackCount,
+        wrapperType = data.wrapperType
+    )
+
+    fun mapSongToEntity(results: List<SongData>) = results.map { mapSongToEntity(it) }
+
+    private fun mapSongToEntity(data: SongData) = SongEntity(
+        artistId = data.artistId,
+        artistName = data.artistName,
+        artistViewUrl = data.artistViewUrl,
+        artworkUrl100 = data.artworkUrl100,
+        artworkUrl30 = data.artworkUrl30,
+        artworkUrl60 = data.artworkUrl60,
+        collectionCensoredName = data.collectionCensoredName,
+        collectionExplicitness = data.collectionExplicitness,
+        collectionId = data.collectionId,
+        collectionName = data.collectionName,
+        collectionPrice = data.collectionPrice,
+        collectionViewUrl = data.collectionViewUrl,
+        country = data.country,
+        currency = data.currency,
+        discCount = data.discCount,
+        discNumber = data.discNumber,
+        isStreamable = data.isStreamable,
+        kind = data.kind,
+        previewUrl = data.previewUrl,
+        primaryGenreName = data.primaryGenreName,
+        releaseDate = data.releaseDate,
+        trackCensoredName = data.trackCensoredName,
+        trackCount = data.trackCount,
+        trackExplicitness = data.trackExplicitness,
+        trackId = data.trackId,
+        trackName = data.trackName,
+        trackNumber = data.trackNumber,
+        trackPrice = data.trackPrice,
+        trackTimeMillis = data.trackTimeMillis,
+        trackViewUrl = data.trackViewUrl,
         wrapperType = data.wrapperType
     )
 }

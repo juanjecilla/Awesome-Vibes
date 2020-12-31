@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemArtistBinding
+import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Artist
+import com.scallop.awesomevibes.ui.commons.OnItemClick
 
-class ArtistsAdapter :
+class ArtistsAdapter(private val mListener: OnItemClick<Artist>) :
     RecyclerView.Adapter<ArtistsAdapter.ArtistsListViewHolder>() {
 
     private var mData = mutableListOf<Artist>()
@@ -39,11 +41,16 @@ class ArtistsAdapter :
         private lateinit var mItem: Artist
         private val mBinding = ItemArtistBinding.bind(itemView)
 
+        init {
+            itemView.setOnClickListener { mListener.onItemClicked(mItem) }
+        }
+
         fun bind(item: Artist) {
             mItem = item
 
             with(mBinding) {
                 artistName.text = item.artistName
+                artistGenre.text = item.primaryGenreName
             }
         }
     }

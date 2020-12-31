@@ -7,7 +7,7 @@ class ArtistMapper {
 
     fun mapArtist(artists: List<ArtistEntity>) = artists.map { mapArtist(it) }
 
-    fun mapArtist(artist: ArtistEntity) = Artist(
+    private fun mapArtist(artist: ArtistEntity) = Artist(
         artistId = artist.artistId,
         amgArtistId = artist.amgArtistId,
         artistLinkUrl = artist.artistLinkUrl,

@@ -3,8 +3,8 @@ package com.scallop.data.repository
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
 import com.scallop.domain.entities.ItunesApiResponseEntity
+import com.scallop.domain.entities.SongEntity
 import com.scallop.domain.repositories.MusicRepository
-import io.reactivex.Observable
 import kotlinx.coroutines.flow.Flow
 
 class MusicRepositoryImpl(
@@ -24,5 +24,13 @@ class MusicRepositoryImpl(
         page: Int
     ): Flow<ItunesApiResponseEntity<AlbumEntity>> {
         return mRemote.getAlbumsFromArtist(name, page)
+    }
+
+    override suspend fun getSongsFromAlbum(
+        name: String,
+        albumId: Long,
+        page: Int
+    ): Flow<ItunesApiResponseEntity<SongEntity>> {
+        return mRemote.getSongsFromAlbum(name, albumId, page)
     }
 }

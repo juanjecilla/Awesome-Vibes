@@ -10,7 +10,7 @@ data class Artist(
     val artistLinkUrl: String,
     val artistName: String,
     val artistType: String,
-    val primaryGenreId: Int,
-    val primaryGenreName: String,
+    val primaryGenreId: Int?,
+    val primaryGenreName: String?,
     val wrapperType: String
 )

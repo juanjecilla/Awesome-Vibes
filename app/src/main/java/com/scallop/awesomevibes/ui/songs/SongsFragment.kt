@@ -1,38 +1,37 @@
-package com.scallop.awesomevibes.ui.albums
+package com.scallop.awesomevibes.ui.songs
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.common.BaseFragment
-import com.scallop.awesomevibes.databinding.FragmentAlbumsBinding
-import com.scallop.awesomevibes.entities.Album
+import com.scallop.awesomevibes.databinding.FragmentSongsBinding
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
-import com.scallop.awesomevibes.ui.commons.OnItemClick
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
+class SongsFragment : BaseFragment() {
 
-    private val mViewModel: AlbumsViewModel by viewModel()
-    private var mBinding: FragmentAlbumsBinding? = null
+    private val mViewModel: SongsViewModel by viewModel()
+    private var mBinding: FragmentSongsBinding? = null
 
-    private lateinit var mAdapter: AlbumsAdapter
+    private lateinit var mAdapter: SongsAdapter
+    private lateinit var mLayoutManager: GridLayoutManager
 
-    private lateinit var mArtistName: String
-    private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mSearchAlbum: String
+    private var mSearchAlbumId: Long = 0
 
     private lateinit var mEndlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mAdapter = AlbumsAdapter(this)
+        mAdapter = SongsAdapter()
     }
 
     override fun onCreateView(
@@ -41,33 +40,36 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_albums, container, false)
+        return inflater.inflate(R.layout.fragment_songs, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding = FragmentAlbumsBinding.bind(view)
+        mBinding = FragmentSongsBinding.bind(view)
 
         arguments?.let {
-            val passedArguments = AlbumsFragmentArgs.fromBundle(it)
-            mArtistName = passedArguments.searchArtist
-            mViewModel.getAlbums(passedArguments.searchArtist)
+            val passedArguments = SongsFragmentArgs.fromBundle(it)
+            mSearchAlbum = passedArguments.searchAlbum
+            mSearchAlbumId = passedArguments.searchAlbumId
+
+            mViewModel.getSongs(passedArguments.searchAlbum, passedArguments.searchAlbumId)
         }
 
         mBinding?.let {
             with(it) {
-                mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                songList.adapter = mAdapter
+                mLayoutManager = GridLayoutManager(context, 2)
                 mEndlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
                     mLayoutManager,
                     STARTING_PAGE_INDEX
                 ) {
                     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                        mViewModel.getAlbums(mArtistName, page)
+                        mViewModel.getSongs(mSearchAlbum, mSearchAlbumId, page)
                     }
                 }
-                albumList.adapter = mAdapter
-                albumList.layoutManager = mLayoutManager
-                albumList.addOnScrollListener(mEndlessRecyclerViewScrollListener)
+
+                songList.layoutManager = mLayoutManager
+                songList.addOnScrollListener(mEndlessRecyclerViewScrollListener)
             }
         }
 
@@ -90,14 +92,6 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
     override fun onDestroyView() {
         mBinding = null
         super.onDestroyView()
-    }
-
-    override fun onItemClicked(item: Album) {
-        val action = AlbumsFragmentDirections.searchSongs()
-        action.searchAlbum = item.collectionName
-        action.searchAlbumId = item.collectionId
-        val navController = view?.findNavController()
-        navController?.navigate(action)
     }
 
     companion object {

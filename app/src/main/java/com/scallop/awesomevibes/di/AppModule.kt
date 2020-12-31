@@ -1,7 +1,12 @@
 package com.scallop.awesomevibes.di
 
+import com.scallop.awesomevibes.mappers.AlbumsMapper
 import com.scallop.awesomevibes.mappers.ArtistMapper
+import com.scallop.awesomevibes.mappers.SongsMapper
+import com.scallop.awesomevibes.ui.albums.AlbumsViewModel
 import com.scallop.awesomevibes.ui.artists.ArtistsViewModel
+import com.scallop.awesomevibes.ui.search.SearchViewModel
+import com.scallop.awesomevibes.ui.songs.SongsViewModel
 import com.scallop.data.api.ItunesApi
 import com.scallop.data.mappers.MusicDataEntityMapper
 import com.scallop.data.mappers.MusicEntityDataMapper
@@ -9,7 +14,9 @@ import com.scallop.data.repository.MusicLocalImpl
 import com.scallop.data.repository.MusicRemoteImpl
 import com.scallop.data.repository.MusicRepositoryImpl
 import com.scallop.domain.repositories.MusicRepository
+import com.scallop.domain.usecases.GetAlbumsUseCase
 import com.scallop.domain.usecases.GetArtistsUseCase
+import com.scallop.domain.usecases.GetSongsUseCase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -32,11 +39,9 @@ val mRepositoryModules = module {
 }
 
 val mUseCaseModules = module {
-    factory {
-        GetArtistsUseCase(
-            get()
-        )
-    }
+    factory { GetArtistsUseCase(get()) }
+    factory { GetAlbumsUseCase(get()) }
+    factory { GetSongsUseCase(get()) }
 }
 
 val mNetworkModules = module {
@@ -55,9 +60,10 @@ val mNetworkModules = module {
 }*/
 
 val mViewModels = module {
-    viewModel {
-        ArtistsViewModel(get(), ArtistMapper())
-    }
+    viewModel { SearchViewModel() }
+    viewModel { ArtistsViewModel(get(), ArtistMapper()) }
+    viewModel { AlbumsViewModel(get(), AlbumsMapper()) }
+    viewModel { SongsViewModel(get(), SongsMapper()) }
 }
 
 
