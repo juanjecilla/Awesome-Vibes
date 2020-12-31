@@ -8,7 +8,6 @@ import coil.load
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemAlbumBinding
 import com.scallop.awesomevibes.entities.Album
-import com.scallop.awesomevibes.entities.Artist
 import com.scallop.awesomevibes.ui.commons.OnItemClick
 
 class AlbumsAdapter(private val mListener: OnItemClick<Album>) :

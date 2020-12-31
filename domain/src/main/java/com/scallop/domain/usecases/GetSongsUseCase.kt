@@ -9,5 +9,6 @@ class GetSongsUseCase(
     private val mRepository: MusicRepository
 ) : BaseUseCase<ItunesApiResponseEntity<AlbumEntity>>() {
 
-    suspend fun getSongs(name: String, albumId: Long, page: Int) = mRepository.getSongsFromAlbum(name, albumId,  page)
+    suspend fun getSongs(name: String, albumId: Long, page: Int) =
+        mRepository.getSongsFromAlbum(name, albumId, page)
 }

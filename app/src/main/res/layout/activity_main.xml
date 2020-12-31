@@ -23,7 +23,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/ToolBarStyle"/>
+                app:theme="@style/ToolBarStyle" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,8 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:visibility="gone"
             app:labelVisibilityMode="unlabeled"
-            android:visibility="gone" app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:menu="@menu/bottom_menu_nav">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>

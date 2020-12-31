@@ -1,9 +1,7 @@
 package com.scallop.awesomevibes.ui
 
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 bottomNavBar, navHostFragment.navController
             )
 
-            val appBarConfiguration = AppBarConfiguration( navHostFragment.navController.graph)
+            val appBarConfiguration = AppBarConfiguration(navHostFragment.navController.graph)
             toolbar.setupWithNavController(navHostFragment.navController, appBarConfiguration)
         }
     }

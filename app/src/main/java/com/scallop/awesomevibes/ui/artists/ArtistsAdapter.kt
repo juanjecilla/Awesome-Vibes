@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemArtistBinding
-import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Artist
 import com.scallop.awesomevibes.ui.commons.OnItemClick
 

@@ -5,13 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.scallop.awesomevibes.common.BaseViewModel
 import com.scallop.awesomevibes.entities.Album
-import com.scallop.awesomevibes.entities.Artist
 import com.scallop.awesomevibes.entities.Data
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.AlbumsMapper
-import com.scallop.awesomevibes.mappers.ArtistMapper
 import com.scallop.domain.usecases.GetAlbumsUseCase
-import com.scallop.domain.usecases.GetArtistsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map

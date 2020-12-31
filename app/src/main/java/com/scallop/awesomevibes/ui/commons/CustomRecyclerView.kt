@@ -5,23 +5,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.scallop.awesomevibes.ui.artists.ArtistsFragment
-import java.lang.IllegalArgumentException
 
-class CustomRecyclerView(context: Context): RecyclerView(context) {
+class CustomRecyclerView(context: Context) : RecyclerView(context) {
 
-    fun getlayout(){
+    fun getlayout() {
         this.layoutManager
     }
 
-    fun setLoadMore(){
-        val typedLayoutManager = when(this.layoutManager){
-            is GridLayoutManager-> layoutManager as GridLayoutManager
-            is StaggeredGridLayoutManager-> layoutManager as StaggeredGridLayoutManager
-            is LinearLayoutManager-> layoutManager as LinearLayoutManager
+    fun setLoadMore() {
+        val typedLayoutManager = when (this.layoutManager) {
+            is GridLayoutManager -> layoutManager as GridLayoutManager
+            is StaggeredGridLayoutManager -> layoutManager as StaggeredGridLayoutManager
+            is LinearLayoutManager -> layoutManager as LinearLayoutManager
             else -> layoutManager as LinearLayoutManager
         }
-        addOnScrollListener(object : EndlessRecyclerViewScrollListener(typedLayoutManager as LinearLayoutManager,
+        addOnScrollListener(object : EndlessRecyclerViewScrollListener(
+            typedLayoutManager as LinearLayoutManager,
             0
         ) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {

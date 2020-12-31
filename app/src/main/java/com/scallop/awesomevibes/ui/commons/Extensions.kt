@@ -15,7 +15,8 @@ fun View.visible(visible: Boolean, animate: Boolean = true) {
             })
         } else {
             visibility = View.VISIBLE
-        }    } else {
+        }
+    } else {
         this.visibility = View.GONE
     }
 }
