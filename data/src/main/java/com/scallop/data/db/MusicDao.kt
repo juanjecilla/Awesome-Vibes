@@ -1,30 +1,27 @@
 package com.scallop.data.db
 
 import androidx.room.*
-import com.scallop.data.entitites.MovieDetailData
-import com.scallop.data.entitites.MovieItemData
-import io.reactivex.Observable
+import com.scallop.data.entitites.SongData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MusicDao {
 
-    @Query("Select * from movie_items")
-    fun getMovieItems(): Flow<List<MovieItemData>?>
+    @Query("Select * from songs")
+    fun getSavedSongs(): Flow<List<SongData>>
+
+    @Query("Select * from songs where collectionId = :albumId")
+    fun getSavedSongs(albumId: Long): Flow<List<SongData>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertMovieItems(movieItems: List<MovieItemData>)
+    fun insertSong(songData: SongData)
 
-    @Update
-    fun updateMovieItem(movieItem: MovieItemData)
+    @Delete
+    fun deleteSong(songData: SongData)
 
-    @Query("Select * from movie_items where fav = 1")
-    fun getFavouriteMovieItems(): Flow<List<MovieItemData>>
+    @Query("DELETE FROM songs")
+    fun clearSongs()
 
-    @Query("DELETE FROM movie_items")
-    fun clearMovieItems()
-
-    @Query("Select * from movie_detail Where id = :id")
-    fun getMovieDetail(id: Long): Flow<MovieDetailData?>
-
+    @Query("Select * from songs where trackId = :id")
+    fun getSavedSong(id: Int): SongData?
 }

@@ -5,7 +5,6 @@ import com.scallop.data.commons.Properties
 import com.scallop.data.mappers.MusicDataEntityMapper
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
-import com.scallop.domain.entities.ItunesApiResponseEntity
 import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,22 +16,22 @@ class MusicRemoteImpl constructor(private val mApi: ItunesApi) : MusicDataStore 
     override suspend fun getArtistsByName(
         name: String,
         page: Int
-    ): Flow<ItunesApiResponseEntity<ArtistEntity>> {
+    ): Flow<List<ArtistEntity>> {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getArtistsByName(name, offset)
         return flow {
-            result.body()?.let { emit(mMapper.mapArtistsToEntity(it)) }
+            result.body()?.let { emit(mMapper.mapArtistsToEntity(it.results)) }
         }
     }
 
     override suspend fun getAlbumsFromArtist(
         name: String,
         page: Int
-    ): Flow<ItunesApiResponseEntity<AlbumEntity>> {
+    ): Flow<List<AlbumEntity>> {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getAlbumsFromArtist(name, offset)
         return flow {
-            result.body()?.let { emit(mMapper.mapToEntity(it)) }
+            result.body()?.let { emit(mMapper.mapToEntity(it.results)) }
         }
     }
 
@@ -40,19 +39,14 @@ class MusicRemoteImpl constructor(private val mApi: ItunesApi) : MusicDataStore 
         name: String,
         albumId: Long,
         page: Int
-    ): Flow<ItunesApiResponseEntity<SongEntity>> {
+    ): Flow<List<SongEntity>> {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getSongsFromAlbum(name, offset)
 
         return flow {
             result.body()?.let {
                 val validResults = it.results.filter { it1 -> it1.collectionId == albumId }
-                emit(
-                    ItunesApiResponseEntity(
-                        validResults.size.toLong(),
-                        mMapper.mapSongToEntity(validResults)
-                    )
-                )
+                emit(mMapper.mapSongToEntity(validResults))
             }
         }
     }

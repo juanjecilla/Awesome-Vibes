@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.common.BaseFragment
 import com.scallop.awesomevibes.databinding.FragmentSongsBinding
+import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SongsFragment : BaseFragment() {
+class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
     private val mViewModel: SongsViewModel by viewModel()
     private var mBinding: FragmentSongsBinding? = null
@@ -31,7 +32,7 @@ class SongsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mAdapter = SongsAdapter()
+        mAdapter = SongsAdapter(this)
     }
 
     override fun onCreateView(
@@ -96,5 +97,9 @@ class SongsFragment : BaseFragment() {
 
     companion object {
         private const val STARTING_PAGE_INDEX = 0
+    }
+
+    override fun saveSong(song: Song) {
+        mViewModel.saveSong(song)
     }
 }

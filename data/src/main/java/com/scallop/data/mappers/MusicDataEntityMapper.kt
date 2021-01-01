@@ -16,9 +16,9 @@ class MusicDataEntityMapper constructor() {
         results = mapArtistsToEntity(data.results)
     )
 
-    private fun mapArtistsToEntity(results: List<ArtistData>) = results.map { mapToEntity(it) }
+    fun mapArtistsToEntity(results: List<ArtistData>) = results.map { mapToEntity(it) }
 
-    private fun mapToEntity(data: ArtistData) = ArtistEntity(
+    fun mapToEntity(data: ArtistData) = ArtistEntity(
         artistId = data.artistId,
         amgArtistId = data.amgArtistId,
         artistLinkUrl = data.artistLinkUrl,
@@ -34,9 +34,9 @@ class MusicDataEntityMapper constructor() {
         results = mapToEntity(data.results)
     )
 
-    private fun mapToEntity(results: List<AlbumData>) = results.map { mapToEntity(it) }
+    fun mapToEntity(results: List<AlbumData>) = results.map { mapToEntity(it) }
 
-    private fun mapToEntity(data: AlbumData) = AlbumEntity(
+    fun mapToEntity(data: AlbumData) = AlbumEntity(
         amgArtistId = data.amgArtistId,
         artistId = data.artistId,
         artistName = data.artistName,
@@ -61,7 +61,7 @@ class MusicDataEntityMapper constructor() {
 
     fun mapSongToEntity(results: List<SongData>) = results.map { mapSongToEntity(it) }
 
-    private fun mapSongToEntity(data: SongData) = SongEntity(
+    fun mapSongToEntity(data: SongData) = SongEntity(
         artistId = data.artistId,
         artistName = data.artistName,
         artistViewUrl = data.artistViewUrl,

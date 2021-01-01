@@ -8,7 +8,7 @@ import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemSongBinding
 import com.scallop.awesomevibes.entities.Song
 
-class SongsAdapter :
+class SongsAdapter(private val mListener: OnSongItemInteractor) :
     RecyclerView.Adapter<SongsAdapter.SongsListViewHolder>() {
 
     private var mData = mutableListOf<Song>()
@@ -39,11 +39,18 @@ class SongsAdapter :
         private lateinit var mItem: Song
         private val mBinding = ItemSongBinding.bind(itemView)
 
+        init {
+            mBinding.save.setOnClickListener { mListener.saveSong(mItem) }
+        }
+
         fun bind(item: Song) {
             mItem = item
 
             with(mBinding) {
                 songName.text = item.trackName
+                if (mItem.savedSong) {
+
+                }
             }
         }
     }

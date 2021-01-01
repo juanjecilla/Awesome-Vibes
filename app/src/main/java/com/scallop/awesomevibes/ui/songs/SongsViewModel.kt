@@ -30,8 +30,16 @@ class SongsViewModel(
                 mUseCase.getSongs(albumName, albumId, page)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it.results))
+                _data.value = Data(Status.SUCCESSFUL, data.value?.data?.let {it1 -> it1 + mMapper.mapSongs(it) } )
             }.collect()
+        }
+    }
+
+    fun saveSong(song: Song) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                mUseCase.saveSong(mMapper.mapSong(song))
+            }
         }
     }
 }
