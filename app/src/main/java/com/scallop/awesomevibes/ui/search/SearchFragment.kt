@@ -12,7 +12,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private val mViewModel: SearchViewModel by viewModel()
     private var mBinding: FragmentSearchBinding? = null
 
     override fun onCreateView(
