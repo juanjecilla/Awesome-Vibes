@@ -5,7 +5,6 @@ import com.scallop.awesomevibes.mappers.ArtistMapper
 import com.scallop.awesomevibes.mappers.SongsMapper
 import com.scallop.awesomevibes.ui.albums.AlbumsViewModel
 import com.scallop.awesomevibes.ui.artists.ArtistsViewModel
-import com.scallop.awesomevibes.ui.search.SearchViewModel
 import com.scallop.awesomevibes.ui.songs.SongsViewModel
 import com.scallop.data.api.ItunesApi
 import com.scallop.data.mappers.MusicDataEntityMapper
@@ -45,7 +44,7 @@ val mUseCaseModules = module {
 }
 
 val mNetworkModules = module {
-    single { createNetworkClient(BASE_URL) }
+    single { createNetworkClient(BASE_URL, get()) }
     single { (get() as Retrofit).create(ItunesApi::class.java) }
 }
 
@@ -60,7 +59,6 @@ val mNetworkModules = module {
 }*/
 
 val mViewModels = module {
-    viewModel { SearchViewModel() }
     viewModel { ArtistsViewModel(get(), ArtistMapper()) }
     viewModel { AlbumsViewModel(get(), AlbumsMapper()) }
     viewModel { SongsViewModel(get(), SongsMapper()) }
