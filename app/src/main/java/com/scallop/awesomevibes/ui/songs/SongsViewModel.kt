@@ -2,8 +2,8 @@ package com.scallop.awesomevibes.ui.songs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.scallop.awesomevibes.common.BaseViewModel
 import com.scallop.awesomevibes.entities.Data
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 class SongsViewModel(
     private val mUseCase: GetSongsUseCase,
     private val mMapper: SongsMapper
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _data = MutableLiveData<Data<List<Song>>>()
     val data: LiveData<Data<List<Song>>> get() = _data

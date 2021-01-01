@@ -1,5 +1,6 @@
 package com.scallop.awesomevibes.ui.songs
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.common.BaseFragment
 import com.scallop.awesomevibes.databinding.FragmentSongsBinding
+import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SongsFragment : BaseFragment() {
+class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
     private val mViewModel: SongsViewModel by viewModel()
     private var mBinding: FragmentSongsBinding? = null
@@ -31,7 +33,7 @@ class SongsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mAdapter = SongsAdapter()
+        mAdapter = SongsAdapter(this)
     }
 
     override fun onCreateView(
@@ -92,6 +94,16 @@ class SongsFragment : BaseFragment() {
     override fun onDestroyView() {
         mBinding = null
         super.onDestroyView()
+    }
+
+    override fun shareSong(song: Song) {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+        shareIntent.putExtra(Intent.EXTRA_TEXT, song.trackViewUrl)
+        shareIntent.type = "text/plain"
+
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_label)))
     }
 
     companion object {

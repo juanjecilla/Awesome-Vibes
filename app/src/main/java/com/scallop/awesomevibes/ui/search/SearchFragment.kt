@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.FragmentSearchBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
