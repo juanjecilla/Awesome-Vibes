@@ -86,7 +86,6 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
                 }
             }
         })
-
     }
 
     override fun onDestroyView() {
