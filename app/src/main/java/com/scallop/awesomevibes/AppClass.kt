@@ -21,6 +21,7 @@ class AppClass : Application() {
                     mViewModels,
                     mRepositoryModules,
                     mUseCaseModules,
+                    mOtherModules,
                 )
             )
         }

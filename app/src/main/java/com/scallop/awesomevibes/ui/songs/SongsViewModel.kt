@@ -9,6 +9,7 @@ import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.SongsMapper
 import com.scallop.domain.usecases.GetSongsUseCase
+import com.scallop.domain.usecases.PlaySongUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SongsViewModel(
-    private val mUseCase: GetSongsUseCase,
+    private val mGetSongsUseCase: GetSongsUseCase,
+    private val mPlaySongUseCase: PlaySongUseCase,
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
@@ -27,11 +29,19 @@ class SongsViewModel(
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getSongs(albumName, albumId, page)
+                mGetSongsUseCase.getSongs(albumName, albumId, page)
             }
             results.map {
                 _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it.results))
             }.collect()
         }
+    }
+
+    fun playSong(url: String) {
+        mPlaySongUseCase.playSong(url)
+    }
+
+    fun stopSong() {
+        mPlaySongUseCase.stopSong()
     }
 }
