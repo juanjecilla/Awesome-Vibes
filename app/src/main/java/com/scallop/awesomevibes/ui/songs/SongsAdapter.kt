@@ -41,6 +41,7 @@ class SongsAdapter(private val mListener: OnSongItemInteractor) :
 
         init {
             mBinding.save.setOnClickListener { mListener.saveSong(mItem) }
+            itemView.setOnClickListener { mListener.onItemClicked(mItem) }
         }
 
         fun bind(item: Song) {

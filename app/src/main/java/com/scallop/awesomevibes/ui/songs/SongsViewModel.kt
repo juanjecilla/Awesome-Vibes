@@ -2,13 +2,14 @@ package com.scallop.awesomevibes.ui.songs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.scallop.awesomevibes.common.BaseViewModel
 import com.scallop.awesomevibes.entities.Data
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.SongsMapper
 import com.scallop.domain.usecases.GetSongsUseCase
+import com.scallop.domain.usecases.PlaySongUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -16,9 +17,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SongsViewModel(
-    private val mUseCase: GetSongsUseCase,
+    private val mGetSongsUseCase: GetSongsUseCase,
+    private val mPlaySongUseCase: PlaySongUseCase,
     private val mMapper: SongsMapper
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _data = MutableLiveData<Data<List<Song>>>()
     val data: LiveData<Data<List<Song>>> get() = _data
@@ -27,7 +29,7 @@ class SongsViewModel(
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getSongs(albumName, albumId, page)
+                mGetSongsUseCase.getSongs(albumName, albumId, page)
             }
             results.map {
                 _data.value = Data(Status.SUCCESSFUL, data.value?.data?.let {it1 -> it1 + mMapper.mapSongs(it) } )
@@ -41,5 +43,13 @@ class SongsViewModel(
                 mUseCase.saveSong(mMapper.mapSong(song))
             }
         }
+    }
+
+    fun playSong(url: String) {
+        mPlaySongUseCase.playSong(url)
+    }
+
+    fun stopSong() {
+        mPlaySongUseCase.stopSong()
     }
 }

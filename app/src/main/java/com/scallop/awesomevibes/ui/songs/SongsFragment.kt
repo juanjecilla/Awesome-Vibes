@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
@@ -13,6 +15,8 @@ import com.scallop.awesomevibes.databinding.FragmentSongsBinding
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
+import com.scallop.awesomevibes.ui.commons.Utils
+import com.scallop.awesomevibes.ui.player.OptionsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SongsFragment : BaseFragment(), OnSongItemInteractor {
@@ -28,6 +32,7 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
     private lateinit var mEndlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
 
+    private var mSelectedSong: Song? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +59,16 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
             mSearchAlbumId = passedArguments.searchAlbumId
 
             mViewModel.getSongs(passedArguments.searchAlbum, passedArguments.searchAlbumId)
+        }
+
+        setFragmentResultListener(OptionsFragment.SELECTED_ACTION) { key, bundle ->
+            when (bundle["data"]) {
+                OptionsFragment.PLAY_ACTION -> mSelectedSong?.let { mViewModel.playSong(it.previewUrl) }
+                OptionsFragment.SHARE_ACTION -> Utils.shareSong(
+                    context,
+                    mSelectedSong?.trackViewUrl
+                )
+            }
         }
 
         mBinding?.let {
@@ -92,7 +107,17 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
     override fun onDestroyView() {
         mBinding = null
+        mViewModel.stopSong()
         super.onDestroyView()
+    }
+
+    override fun onItemClicked(song: Song) {
+        mSelectedSong = song
+        val action = SongsFragmentDirections.showPlayer()
+        action.mediaUrl = song.previewUrl
+        action.isVideo = false
+        val navController = view?.findNavController()
+        navController?.navigate(action)
     }
 
     companion object {

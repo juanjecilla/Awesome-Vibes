@@ -47,7 +47,6 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding = FragmentArtistsBinding.bind(view)
-        Log.d("HOLLA", "@sfdsf")
 
         arguments?.let {
             val passedArguments = ArtistsFragmentArgs.fromBundle(it)
@@ -86,7 +85,6 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
                 }
             }
         })
-
     }
 
     override fun onDestroyView() {

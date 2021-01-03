@@ -37,6 +37,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/next_label"
+        android:src="@android:drawable/ic_menu_search"
+        android:tint="@color/black"
         app:fabSize="normal" />
 
 </FrameLayout>

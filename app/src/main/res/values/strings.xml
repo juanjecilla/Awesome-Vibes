@@ -4,4 +4,6 @@
     <string name="next_label">Next</string>
     <string name="search_label">Search your favourite artsist</string>
     <string name="search_hint">Rolling Stones</string>
+    <string name="share_label">Share</string>
+    <string name="play_label">Play song preview</string>
 </resources>
