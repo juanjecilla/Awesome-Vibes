@@ -1,6 +1,9 @@
 package com.scallop.domain.repositories
 
 import com.scallop.domain.entities.*
+import com.scallop.domain.entities.AlbumEntity
+import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
@@ -8,18 +11,22 @@ interface MusicRepository {
     suspend fun getArtistsByName(
         name: String,
         page: Int
-    ): Flow<ItunesApiResponseEntity<ArtistEntity>>
+    ): Flow<List<ArtistEntity>>
 
     suspend fun getAlbumsFromArtist(
         name: String,
         page: Int
-    ): Flow<ItunesApiResponseEntity<AlbumEntity>>
+    ): Flow<List<AlbumEntity>>
 
     suspend fun getSongsFromAlbum(
         name: String,
         albumId: Long,
         page: Int
-    ): Flow<ItunesApiResponseEntity<SongEntity>>
+    ): Flow<List<SongEntity>>
+
+    suspend fun saveSong(song: SongEntity)
+
+    suspend fun deleteSong(song: SongEntity)
 
     suspend fun getMusicVideo(
         name: String,

@@ -12,6 +12,7 @@ import com.scallop.awesomevibes.mappers.SongsMapper
 import com.scallop.domain.usecases.GetMusicVideoUseCase
 import com.scallop.domain.usecases.GetSongsUseCase
 import com.scallop.domain.usecases.PlaySongUseCase
+import com.scallop.domain.usecases.SaveSongUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -22,6 +23,7 @@ class SongsViewModel(
     private val mGetSongsUseCase: GetSongsUseCase,
     private val mPlaySongUseCase: PlaySongUseCase,
     private val mGetMusicVideoUseCase: GetMusicVideoUseCase,
+    private val mSaveSongUseCase: SaveSongUseCase,
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
@@ -38,8 +40,20 @@ class SongsViewModel(
                 mGetSongsUseCase.getSongs(albumName, albumId, page)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it.results))
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
             }.collect()
+        }
+    }
+
+    fun saveSong(song: Song) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                if (song.savedSong) {
+                    mSaveSongUseCase.saveSong(mMapper.mapSong(song))
+                } else {
+                    mSaveSongUseCase.deleteSong(mMapper.mapSong(song))
+                }
+            }
         }
     }
 

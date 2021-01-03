@@ -1,5 +1,9 @@
 package com.scallop.data.entitites
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "songs")
 data class SongData(
     val artistId: Int,
     val artistName: String,
@@ -25,7 +29,7 @@ data class SongData(
     val trackCensoredName: String,
     val trackCount: Int,
     val trackExplicitness: String,
-    val trackId: Int,
+    @PrimaryKey val trackId: Int,
     val trackName: String,
     val trackNumber: Int,
     val trackPrice: Double,

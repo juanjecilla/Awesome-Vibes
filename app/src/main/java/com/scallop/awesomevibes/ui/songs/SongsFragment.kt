@@ -151,4 +151,8 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
     companion object {
         private const val STARTING_PAGE_INDEX = 0
     }
+
+    override fun saveSong(song: Song) {
+        mViewModel.saveSong(song)
+    }
 }

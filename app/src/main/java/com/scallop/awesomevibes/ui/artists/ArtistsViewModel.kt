@@ -31,7 +31,7 @@ class ArtistsViewModel(
                 mUseCase.getArtists(searchName, page)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapArtist(it.results))
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapArtist(it))
             }.collect()
         }
     }

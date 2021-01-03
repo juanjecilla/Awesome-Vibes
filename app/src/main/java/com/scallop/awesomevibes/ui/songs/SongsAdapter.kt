@@ -3,6 +3,7 @@ package com.scallop.awesomevibes.ui.songs
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemSongBinding
@@ -40,6 +41,7 @@ class SongsAdapter(private val mListener: OnSongItemInteractor) :
         private val mBinding = ItemSongBinding.bind(itemView)
 
         init {
+            mBinding.songSave.setOnClickListener { toggleSavedSong() }
             itemView.setOnClickListener { mListener.onItemClicked(mItem) }
         }
 
@@ -48,7 +50,15 @@ class SongsAdapter(private val mListener: OnSongItemInteractor) :
 
             with(mBinding) {
                 songName.text = item.trackName
+                songSave.isSelected = mItem.savedSong
             }
+        }
+
+        private fun toggleSavedSong() {
+            val selected = mBinding.songSave.isSelected
+            mBinding.songSave.isSelected = !selected
+            mItem.savedSong = !selected
+            mListener.saveSong(mItem)
         }
     }
 }

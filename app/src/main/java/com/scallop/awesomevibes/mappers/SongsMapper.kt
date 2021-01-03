@@ -8,7 +8,7 @@ import com.scallop.domain.entities.SongEntity
 class SongsMapper {
     fun mapSongs(songs: List<SongEntity>) = songs.map { mapSong(it) }
 
-    private fun mapSong(entity: SongEntity) = Song(
+    fun mapSong(entity: SongEntity) = Song(
         artistId = entity.artistId,
         artistName = entity.artistName,
         artistViewUrl = entity.artistViewUrl,
@@ -39,8 +39,44 @@ class SongsMapper {
         trackPrice = entity.trackPrice,
         trackTimeMillis = entity.trackTimeMillis,
         trackViewUrl = entity.trackViewUrl,
-        wrapperType = entity.wrapperType
+        wrapperType = entity.wrapperType,
+        savedSong = entity.savedSong
     )
+
+    fun mapSong(song: Song) = SongEntity(
+        artistId = song.artistId,
+        artistName = song.artistName,
+        artistViewUrl = song.artistViewUrl,
+        artworkUrl100 = song.artworkUrl100,
+        artworkUrl30 = song.artworkUrl30,
+        artworkUrl60 = song.artworkUrl60,
+        collectionCensoredName = song.collectionCensoredName,
+        collectionExplicitness = song.collectionExplicitness,
+        collectionId = song.collectionId,
+        collectionName = song.collectionName,
+        collectionPrice = song.collectionPrice,
+        collectionViewUrl = song.collectionViewUrl,
+        country = song.country,
+        currency = song.currency,
+        discCount = song.discCount,
+        discNumber = song.discNumber,
+        isStreamable = song.isStreamable,
+        kind = song.kind,
+        previewUrl = song.previewUrl,
+        primaryGenreName = song.primaryGenreName,
+        releaseDate = song.releaseDate,
+        trackCensoredName = song.trackCensoredName,
+        trackCount = song.trackCount,
+        trackExplicitness = song.trackExplicitness,
+        trackId = song.trackId,
+        trackName = song.trackName,
+        trackNumber = song.trackNumber,
+        trackPrice = song.trackPrice,
+        trackTimeMillis = song.trackTimeMillis,
+        trackViewUrl = song.trackViewUrl,
+        wrapperType = song.wrapperType
+    )
+
 
     fun mapMusicVideo(entity: MusicVideoEntity) = MusicVideo(
         artistId = entity.artistId,
