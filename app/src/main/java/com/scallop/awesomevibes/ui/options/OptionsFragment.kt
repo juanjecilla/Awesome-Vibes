@@ -1,4 +1,4 @@
-package com.scallop.awesomevibes.ui.player
+package com.scallop.awesomevibes.ui.options
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,6 @@ class OptionsFragment : BottomSheetDialogFragment() {
 
     private var mBinding: FragmentOptionsBinding? = null
 
-    private lateinit var mMediaUrl: String
-    private var mIsVideo: Boolean = false
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,17 +28,11 @@ class OptionsFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding = FragmentOptionsBinding.bind(view)
 
-        arguments?.let {
-            val passedArguments = OptionsFragmentArgs.fromBundle(it)
-            mMediaUrl = passedArguments.mediaUrl
-            mIsVideo = passedArguments.isVideo
-        }
-
-
         mBinding?.let {
             with(it) {
                 share.setOnClickListener { sendResult(SHARE_ACTION) }
                 play.setOnClickListener { sendResult(PLAY_ACTION) }
+                searchVideo.setOnClickListener { sendResult(SEARCH_VIDEO_ACTION) }
             }
         }
     }
@@ -61,5 +52,6 @@ class OptionsFragment : BottomSheetDialogFragment() {
 
         const val SHARE_ACTION = "action_share"
         const val PLAY_ACTION = "action_play"
+        const val SEARCH_VIDEO_ACTION = "action_search_video"
     }
 }

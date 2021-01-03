@@ -1,12 +1,10 @@
 package com.scallop.data.repository
 
+import android.util.Log
 import com.scallop.data.api.ItunesApi
 import com.scallop.data.commons.Properties
 import com.scallop.data.mappers.MusicDataEntityMapper
-import com.scallop.domain.entities.AlbumEntity
-import com.scallop.domain.entities.ArtistEntity
-import com.scallop.domain.entities.ItunesApiResponseEntity
-import com.scallop.domain.entities.SongEntity
+import com.scallop.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -53,6 +51,18 @@ class MusicRemoteImpl constructor(private val mApi: ItunesApi) : MusicDataStore 
                         mMapper.mapSongToEntity(validResults)
                     )
                 )
+            }
+        }
+    }
+
+    override suspend fun getMusicVideo(
+        name: String,
+        trackId: Long
+    ): Flow<MusicVideoEntity> {
+        val result = mApi.getMusicVideo(name)
+        return flow {
+            result.body()?.let {
+                emit(mMapper.mapMusicVideoToEntity(it.results[0]))
             }
         }
     }

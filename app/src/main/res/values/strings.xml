@@ -6,4 +6,5 @@
     <string name="search_hint">Rolling Stones</string>
     <string name="share_label">Share</string>
     <string name="play_label">Play song preview</string>
+    <string name="search_video_label">Search video preview</string>
 </resources>

@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scallop.awesomevibes.entities.Data
+import com.scallop.awesomevibes.entities.MusicVideo
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.SongsMapper
+import com.scallop.domain.usecases.GetMusicVideoUseCase
 import com.scallop.domain.usecases.GetSongsUseCase
 import com.scallop.domain.usecases.PlaySongUseCase
 import kotlinx.coroutines.Dispatchers
@@ -19,11 +21,15 @@ import kotlinx.coroutines.withContext
 class SongsViewModel(
     private val mGetSongsUseCase: GetSongsUseCase,
     private val mPlaySongUseCase: PlaySongUseCase,
+    private val mGetMusicVideoUseCase: GetMusicVideoUseCase,
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
     private val _data = MutableLiveData<Data<List<Song>>>()
     val data: LiveData<Data<List<Song>>> get() = _data
+
+    private val _video = MutableLiveData<Data<MusicVideo>>()
+    val video: LiveData<Data<MusicVideo>> get() = _video
 
     fun getSongs(albumName: String, albumId: Long, page: Int = 0) {
         _data.value = Data(Status.LOADING)
@@ -43,5 +49,16 @@ class SongsViewModel(
 
     fun stopSong() {
         mPlaySongUseCase.stopSong()
+    }
+
+    fun getMusicVideo(trackName: String, trackId: Long) {
+        viewModelScope.launch {
+            val results = withContext(Dispatchers.IO) {
+                mGetMusicVideoUseCase.getMusicVideo(trackName, trackId)
+            }
+            results.map {
+                _video.value = Data(Status.SUCCESSFUL, mMapper.mapMusicVideo(it))
+            }.collect()
+        }
     }
 }

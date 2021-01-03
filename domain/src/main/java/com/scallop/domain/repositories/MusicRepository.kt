@@ -1,9 +1,6 @@
 package com.scallop.domain.repositories
 
-import com.scallop.domain.entities.AlbumEntity
-import com.scallop.domain.entities.ArtistEntity
-import com.scallop.domain.entities.ItunesApiResponseEntity
-import com.scallop.domain.entities.SongEntity
+import com.scallop.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
@@ -23,4 +20,9 @@ interface MusicRepository {
         albumId: Long,
         page: Int
     ): Flow<ItunesApiResponseEntity<SongEntity>>
+
+    suspend fun getMusicVideo(
+        name: String,
+        trackId: Long
+    ): Flow<MusicVideoEntity>
 }

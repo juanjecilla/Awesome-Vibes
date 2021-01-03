@@ -27,4 +27,7 @@ class MusicLocalImpl(
         TODO("Not yet implemented")
     }
 
+    override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity> {
+        TODO("Not yet implemented")
+    }
 }

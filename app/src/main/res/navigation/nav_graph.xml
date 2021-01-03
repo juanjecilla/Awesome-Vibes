@@ -83,8 +83,17 @@
             app:argType="long" />
 
         <action
-            android:id="@+id/show_player"
-            app:destination="@id/player"
+            android:id="@+id/show_options"
+            app:destination="@id/options"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/songs" />
+
+        <action
+            android:id="@+id/show_video"
+            app:destination="@id/video"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -94,9 +103,14 @@
     </fragment>
 
     <dialog
-        android:id="@+id/player"
-        android:name="com.scallop.awesomevibes.ui.player.OptionsFragment"
-        tools:layout="@layout/fragment_options">
+        android:id="@+id/options"
+        android:name="com.scallop.awesomevibes.ui.options.OptionsFragment"
+        tools:layout="@layout/fragment_options" />
+
+    <dialog
+        android:id="@+id/video"
+        android:name="com.scallop.awesomevibes.ui.options.VideoFragment"
+        tools:layout="@layout/fragment_video">
 
         <argument
             android:name="media_url"
@@ -104,9 +118,9 @@
             app:argType="string" />
 
         <argument
-            android:name="is_video"
-            android:defaultValue="false"
-            app:argType="boolean" />
+            android:name="media_name"
+            android:defaultValue=""
+            app:argType="string" />
 
     </dialog>
 
