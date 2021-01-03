@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.FragmentSearchBinding
 
@@ -39,9 +40,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchArtist(name: String) {
-        val action = SearchFragmentDirections.searchArtist()
-        action.searchName = name
-        val navController = view?.findNavController()
-        navController?.navigate(action)
+        if (name.isNotEmpty()) {
+            val action = SearchFragmentDirections.searchArtist()
+            action.searchName = name
+            val navController = view?.findNavController()
+            navController?.navigate(action)
+        } else {
+            mBinding?.root?.let { Snackbar.make(it, R.string.empty_search, Snackbar.LENGTH_SHORT).show() }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.scallop.data.repository
 
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 

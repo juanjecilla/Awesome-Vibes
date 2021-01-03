@@ -27,7 +27,6 @@ interface MusicRepository {
     suspend fun saveSong(song: SongEntity)
 
     suspend fun deleteSong(song: SongEntity)
-    ): Flow<ItunesApiResponseEntity<SongEntity>>
 
     suspend fun getMusicVideo(
         name: String,

@@ -48,6 +48,7 @@ val mUseCaseModules = module {
     factory { GetSongsUseCase(get()) }
     factory { PlaySongUseCase(get()) }
     factory { GetMusicVideoUseCase(get()) }
+    factory { SaveSongUseCase(get()) }
 }
 
 val mNetworkModules = module {
@@ -77,7 +78,7 @@ val mLocalModules = module {
 val mViewModels = module {
     viewModel { ArtistsViewModel(get(), ArtistMapper()) }
     viewModel { AlbumsViewModel(get(), AlbumsMapper()) }
-    viewModel { SongsViewModel(get(), get(), get(), SongsMapper()) }
+    viewModel { SongsViewModel(get(), get(), get(), get(), SongsMapper()) }
 }
 
 

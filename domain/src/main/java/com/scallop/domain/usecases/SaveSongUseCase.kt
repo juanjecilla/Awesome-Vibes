@@ -6,10 +6,15 @@ import com.scallop.domain.entities.ItunesApiResponseEntity
 import com.scallop.domain.entities.SongEntity
 import com.scallop.domain.repositories.MusicRepository
 
-class GetSongsUseCase(
+class SaveSongUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<ItunesApiResponseEntity<AlbumEntity>>() {
+) : BaseUseCase<SongEntity>() {
 
-    suspend fun getSongs(name: String, albumId: Long, page: Int) =
-        mRepository.getSongsFromAlbum(name, albumId, page)
+    suspend fun saveSong(song: SongEntity) {
+        mRepository.saveSong(song)
+    }
+
+    suspend fun deleteSong(song: SongEntity) {
+        mRepository.deleteSong(song)
+    }
 }

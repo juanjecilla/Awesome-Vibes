@@ -30,7 +30,7 @@ class AlbumsViewModel(
                 mUseCase.getAlbums(searchName, page)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, data.value?.data?.let {it1 -> it1 + mMapper.mapAlbum(it) } )
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapAlbum(it))
             }.collect()
         }
     }

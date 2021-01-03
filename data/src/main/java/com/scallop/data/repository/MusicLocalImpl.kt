@@ -5,6 +5,7 @@ import com.scallop.data.mappers.MusicDataEntityMapper
 import com.scallop.data.mappers.MusicEntityDataMapper
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
