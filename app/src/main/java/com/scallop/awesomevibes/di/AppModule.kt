@@ -18,10 +18,7 @@ import com.scallop.data.repository.MusicRemoteImpl
 import com.scallop.data.repository.MusicRepositoryImpl
 import com.scallop.domain.repositories.MusicPlayer
 import com.scallop.domain.repositories.MusicRepository
-import com.scallop.domain.usecases.GetAlbumsUseCase
-import com.scallop.domain.usecases.GetArtistsUseCase
-import com.scallop.domain.usecases.GetSongsUseCase
-import com.scallop.domain.usecases.PlaySongUseCase
+import com.scallop.domain.usecases.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -50,6 +47,7 @@ val mUseCaseModules = module {
     factory { GetAlbumsUseCase(get()) }
     factory { GetSongsUseCase(get()) }
     factory { PlaySongUseCase(get()) }
+    factory { GetMusicVideoUseCase(get()) }
 }
 
 val mNetworkModules = module {
@@ -79,7 +77,7 @@ val mLocalModules = module {
 val mViewModels = module {
     viewModel { ArtistsViewModel(get(), ArtistMapper()) }
     viewModel { AlbumsViewModel(get(), AlbumsMapper()) }
-    viewModel { SongsViewModel(get(), get(), SongsMapper()) }
+    viewModel { SongsViewModel(get(), get(), get(), SongsMapper()) }
 }
 
 

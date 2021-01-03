@@ -48,4 +48,7 @@ class MusicLocalImpl(
     suspend fun getSong(songId: Int): SongEntity? {
         return mDao.getSavedSong(songId)?.let { mDataEntityMapper.mapSongToEntity(it) }
     }
+    override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity> {
+        TODO("Not yet implemented")
+    }
 }

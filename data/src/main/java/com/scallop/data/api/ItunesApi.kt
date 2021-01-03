@@ -1,10 +1,7 @@
 package com.scallop.data.api
 
 import com.scallop.data.commons.Properties
-import com.scallop.data.entitites.AlbumData
-import com.scallop.data.entitites.ArtistData
-import com.scallop.data.entitites.ItunesApiResponseData
-import com.scallop.data.entitites.SongData
+import com.scallop.data.entitites.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -35,4 +32,12 @@ interface ItunesApi {
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
     ): Response<ItunesApiResponseData<SongData>>
+
+    @GET("/search?entity=musicVideo&attribute=songTerm")
+    @Headers("Accept: application/json")
+    suspend fun getMusicVideo(
+        @Query("term") name: String,
+        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
+    ): Response<ItunesApiResponseData<MusicVideoData>>
 }

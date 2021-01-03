@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.common.BaseFragment
 import com.scallop.awesomevibes.databinding.FragmentSongsBinding
+import com.scallop.awesomevibes.entities.MusicVideo
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import com.scallop.awesomevibes.ui.commons.Utils
-import com.scallop.awesomevibes.ui.player.OptionsFragment
+import com.scallop.awesomevibes.ui.options.OptionsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SongsFragment : BaseFragment(), OnSongItemInteractor {
@@ -61,13 +62,19 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
             mViewModel.getSongs(passedArguments.searchAlbum, passedArguments.searchAlbumId)
         }
 
-        setFragmentResultListener(OptionsFragment.SELECTED_ACTION) { key, bundle ->
+        setFragmentResultListener(OptionsFragment.SELECTED_ACTION) { _, bundle ->
             when (bundle["data"]) {
                 OptionsFragment.PLAY_ACTION -> mSelectedSong?.let { mViewModel.playSong(it.previewUrl) }
                 OptionsFragment.SHARE_ACTION -> Utils.shareSong(
                     context,
                     mSelectedSong?.trackViewUrl
                 )
+                OptionsFragment.SEARCH_VIDEO_ACTION -> mSelectedSong?.let {
+                    mViewModel.getMusicVideo(
+                        it.trackName,
+                        it.trackId.toLong()
+                    )
+                }
             }
         }
 
@@ -103,6 +110,29 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                 }
             }
         })
+
+        mViewModel.video.observe(viewLifecycleOwner, {
+            when (it.responseType) {
+                Status.LOADING -> {
+                    mBinding?.progressBar?.let { it1 -> showProgressBar(it1, true) }
+                }
+                Status.SUCCESSFUL -> {
+                    mBinding?.progressBar?.let { it1 -> showProgressBar(it1, false) }
+                    it.data?.let { it1 -> showMusicVideo(it1) }
+                }
+                Status.ERROR -> {
+                    Log.d("", "")
+                }
+            }
+        })
+    }
+
+    private fun showMusicVideo(musicVideo: MusicVideo) {
+        val action = SongsFragmentDirections.showVideo()
+        action.mediaUrl = musicVideo.previewUrl
+        action.mediaName = musicVideo.trackName
+        val navController = view?.findNavController()
+        navController?.navigate(action)
     }
 
     override fun onDestroyView() {
@@ -113,9 +143,7 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
     override fun onItemClicked(song: Song) {
         mSelectedSong = song
-        val action = SongsFragmentDirections.showPlayer()
-        action.mediaUrl = song.previewUrl
-        action.isVideo = false
+        val action = SongsFragmentDirections.showOptions()
         val navController = view?.findNavController()
         navController?.navigate(action)
     }

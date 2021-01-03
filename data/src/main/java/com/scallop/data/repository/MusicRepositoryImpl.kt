@@ -3,6 +3,7 @@ package com.scallop.data.repository
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
 import com.scallop.domain.entities.SongEntity
+import com.scallop.domain.entities.*
 import com.scallop.domain.repositories.MusicRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -49,5 +50,9 @@ class MusicRepositoryImpl(
 
     override suspend fun deleteSong(song: SongEntity) {
         mLocal.deleteSong(song)
+    }
+
+    override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity> {
+        return mRemote.getMusicVideo(name, trackId)
     }
 }
