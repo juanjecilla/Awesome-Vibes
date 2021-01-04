@@ -1,9 +1,9 @@
 package com.scallop.awesomevibes.ui.songs
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemSongBinding
@@ -33,6 +33,12 @@ class SongsAdapter(private val mListener: OnSongItemInteractor) :
             mData.addAll(list)
             notifyItemRangeChanged(prevCount, list.size)
         }
+    }
+
+    fun clear() {
+        Log.d("HOLA", "Adapter cleared!")
+        mData.clear()
+        notifyDataSetChanged()
     }
 
     inner class SongsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

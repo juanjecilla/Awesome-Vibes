@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.FragmentSearchBinding
+import com.scallop.awesomevibes.ui.commons.hideKeyboard
+import com.scallop.awesomevibes.ui.commons.on
 
 class SearchFragment : Fragment() {
 
@@ -30,6 +33,7 @@ class SearchFragment : Fragment() {
         mBinding?.let {
             with(it) {
                 next.setOnClickListener { _ -> searchArtist(it.searchBar.text.toString()) }
+                searchBar.on(EditorInfo.IME_ACTION_DONE) { searchArtist(it.searchBar.text.toString()) }
             }
         }
     }
@@ -46,7 +50,11 @@ class SearchFragment : Fragment() {
             val navController = view?.findNavController()
             navController?.navigate(action)
         } else {
-            mBinding?.root?.let { Snackbar.make(it, R.string.empty_search, Snackbar.LENGTH_SHORT).show() }
+            mBinding?.root?.let {
+                Snackbar.make(it, R.string.empty_search, Snackbar.LENGTH_SHORT).show()
+            }
         }
+
+        hideKeyboard()
     }
 }

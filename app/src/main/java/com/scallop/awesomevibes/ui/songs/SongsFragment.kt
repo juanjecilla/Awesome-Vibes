@@ -17,20 +17,26 @@ import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import com.scallop.awesomevibes.ui.commons.Utils
+import com.scallop.awesomevibes.ui.commons.visible
 import com.scallop.awesomevibes.ui.options.OptionsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SongsFragment : BaseFragment(), OnSongItemInteractor {
 
-    private val mViewModel: SongsViewModel by viewModel()
+    private val mViewModel: SongsViewModel by viewModel {
+        parametersOf(arguments?.let {
+            val passedArguments = SongsFragmentArgs.fromBundle(it)
+            passedArguments.searchAlbum
+        }, arguments?.let {
+            val passedArguments = SongsFragmentArgs.fromBundle(it)
+            passedArguments.searchAlbumId
+        })
+    }
     private var mBinding: FragmentSongsBinding? = null
 
     private lateinit var mAdapter: SongsAdapter
     private lateinit var mLayoutManager: GridLayoutManager
-
-    private lateinit var mSearchAlbum: String
-    private var mSearchAlbumId: Long = 0
-
     private lateinit var mEndlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
 
     private var mSelectedSong: Song? = null
@@ -53,14 +59,6 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding = FragmentSongsBinding.bind(view)
-
-        arguments?.let {
-            val passedArguments = SongsFragmentArgs.fromBundle(it)
-            mSearchAlbum = passedArguments.searchAlbum
-            mSearchAlbumId = passedArguments.searchAlbumId
-
-            mViewModel.getSongs(passedArguments.searchAlbum, passedArguments.searchAlbumId)
-        }
 
         setFragmentResultListener(OptionsFragment.SELECTED_ACTION) { _, bundle ->
             when (bundle["data"]) {
@@ -87,7 +85,8 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                     STARTING_PAGE_INDEX
                 ) {
                     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                        mViewModel.getSongs(mSearchAlbum, mSearchAlbumId, page)
+                        Log.d("HOLA","page=$page")
+                        mViewModel.getSongs(page)
                     }
                 }
 
@@ -96,6 +95,8 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
             }
         }
 
+        mAdapter.clear()
+
         mViewModel.data.observe(viewLifecycleOwner, {
             when (it.responseType) {
                 Status.LOADING -> {
@@ -103,7 +104,7 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                 }
                 Status.SUCCESSFUL -> {
                     mBinding?.progressBar?.let { it1 -> showProgressBar(it1, false) }
-                    it.data?.let { it1 -> mAdapter.updateList(it1) }
+                    it.data?.let { it1 -> updateList(it1) }
                 }
                 Status.ERROR -> {
                     Log.d("", "")
@@ -127,14 +128,6 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
         })
     }
 
-    private fun showMusicVideo(musicVideo: MusicVideo) {
-        val action = SongsFragmentDirections.showVideo()
-        action.mediaUrl = musicVideo.previewUrl
-        action.mediaName = musicVideo.trackName
-        val navController = view?.findNavController()
-        navController?.navigate(action)
-    }
-
     override fun onDestroyView() {
         mBinding = null
         mViewModel.stopSong()
@@ -144,6 +137,26 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
     override fun onItemClicked(song: Song) {
         mSelectedSong = song
         val action = SongsFragmentDirections.showOptions()
+        val navController = view?.findNavController()
+        navController?.navigate(action)
+    }
+
+    private fun updateList(items: List<Song>) {
+        mAdapter.updateList(items)
+
+        if (mAdapter.itemCount == 0) {
+            mBinding?.emptyLabel?.visible(true)
+            mBinding?.songList?.visible(false)
+        } else {
+            mBinding?.emptyLabel?.visible(false)
+            mBinding?.songList?.visible(true)
+        }
+    }
+
+    private fun showMusicVideo(musicVideo: MusicVideo) {
+        val action = SongsFragmentDirections.showVideo()
+        action.mediaUrl = musicVideo.previewUrl
+        action.mediaName = musicVideo.trackName
         val navController = view?.findNavController()
         navController?.navigate(action)
     }

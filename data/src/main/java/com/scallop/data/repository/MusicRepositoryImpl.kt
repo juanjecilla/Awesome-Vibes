@@ -1,5 +1,6 @@
 package com.scallop.data.repository
 
+import android.util.Log
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
 import com.scallop.domain.entities.SongEntity
@@ -38,6 +39,7 @@ class MusicRepositoryImpl(
             remote.map {
                 it.apply {
                     val result  = local.contains(it)
+                    Log.d("HOLA", "Size=${local.size}")
                     savedSong = result
                 }
             }

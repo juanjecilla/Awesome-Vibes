@@ -51,6 +51,5 @@ class VideoFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
     }
 
-    companion object {
-    }
+    companion object
 }

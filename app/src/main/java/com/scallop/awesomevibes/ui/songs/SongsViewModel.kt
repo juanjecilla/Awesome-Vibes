@@ -1,5 +1,6 @@
 package com.scallop.awesomevibes.ui.songs
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SongsViewModel(
+    private val mAlbumName: String,
+    private val mAlbumId: Long,
     private val mGetSongsUseCase: GetSongsUseCase,
     private val mPlaySongUseCase: PlaySongUseCase,
     private val mGetMusicVideoUseCase: GetMusicVideoUseCase,
@@ -33,13 +36,18 @@ class SongsViewModel(
     private val _video = MutableLiveData<Data<MusicVideo>>()
     val video: LiveData<Data<MusicVideo>> get() = _video
 
-    fun getSongs(albumName: String, albumId: Long, page: Int = 0) {
+    init {
+        getSongs(0)
+    }
+
+    fun getSongs(page: Int = 0) {
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mGetSongsUseCase.getSongs(albumName, albumId, page)
+                mGetSongsUseCase.getSongs(mAlbumName, mAlbumId, page)
             }
             results.map {
+                Log.d("HOLA", it.filter { it.savedSong }.size.toString())
                 _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
             }.collect()
         }

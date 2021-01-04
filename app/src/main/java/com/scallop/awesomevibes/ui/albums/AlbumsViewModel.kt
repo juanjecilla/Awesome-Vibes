@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlbumsViewModel(
+    private val mArtistName: String,
     private val mUseCase: GetAlbumsUseCase,
     private val mMapper: AlbumsMapper
 ) : ViewModel() {
@@ -23,11 +24,15 @@ class AlbumsViewModel(
     private val _data = MutableLiveData<Data<List<Album>>>()
     val data: LiveData<Data<List<Album>>> get() = _data
 
-    fun getAlbums(searchName: String, page: Int = 0) {
+    init {
+        getAlbums(0)
+    }
+
+    fun getAlbums(page: Int = 0) {
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getAlbums(searchName, page)
+                mUseCase.getAlbums(mArtistName, page)
             }
             results.map {
                 _data.value = Data(Status.SUCCESSFUL, mMapper.mapAlbum(it))
