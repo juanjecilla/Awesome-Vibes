@@ -84,7 +84,11 @@ class SongsViewModel(
                 mGetMusicVideoUseCase.getMusicVideo(trackName, trackId)
             }
             results.map {
-                _video.value = Data(Status.SUCCESSFUL, mMapper.mapMusicVideo(it))
+                it?.let {
+                    _video.value = Data(Status.SUCCESSFUL, mMapper.mapMusicVideo(it))
+                } ?: run {
+                    _video.value = Data(Status.ERROR)
+                }
             }.collect()
         }
     }

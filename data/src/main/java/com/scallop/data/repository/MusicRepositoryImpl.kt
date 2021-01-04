@@ -52,7 +52,7 @@ class MusicRepositoryImpl(
         mLocal.deleteSong(song)
     }
 
-    override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity> {
+    override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity?> {
         return mRemote.getMusicVideo(name, trackId)
     }
 }

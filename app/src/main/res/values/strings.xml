@@ -10,4 +10,5 @@
     <string name="fav_description">Save favourite</string>
     <string name="empty_search">Sorry, we need something to search...</string>
     <string name="empty_label">No results!</string>
+    <string name="video_not_found">Sorry... There is no video available</string>
 </resources>
