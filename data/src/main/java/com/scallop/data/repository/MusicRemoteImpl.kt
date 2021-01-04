@@ -1,13 +1,12 @@
 package com.scallop.data.repository
 
-import android.util.Log
 import com.scallop.data.api.ItunesApi
 import com.scallop.data.commons.Properties
 import com.scallop.data.mappers.MusicDataEntityMapper
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.entities.SongEntity
-import com.scallop.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

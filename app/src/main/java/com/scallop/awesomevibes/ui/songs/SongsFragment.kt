@@ -85,7 +85,6 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                     STARTING_PAGE_INDEX
                 ) {
                     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                        Log.d("HOLA","page=$page")
                         mViewModel.getSongs(page)
                     }
                 }
@@ -94,8 +93,6 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                 songList.addOnScrollListener(mEndlessRecyclerViewScrollListener)
             }
         }
-
-        mAdapter.clear()
 
         mViewModel.data.observe(viewLifecycleOwner, {
             when (it.responseType) {
@@ -142,7 +139,7 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
     }
 
     private fun updateList(items: List<Song>) {
-        mAdapter.updateList(items)
+        mAdapter.submitList(items)
 
         if (mAdapter.itemCount == 0) {
             mBinding?.emptyLabel?.visible(true)

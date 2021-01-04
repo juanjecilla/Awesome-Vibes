@@ -1,44 +1,25 @@
 package com.scallop.awesomevibes.ui.songs
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.ItemSongBinding
 import com.scallop.awesomevibes.entities.Song
 
 class SongsAdapter(private val mListener: OnSongItemInteractor) :
-    RecyclerView.Adapter<SongsAdapter.SongsListViewHolder>() {
-
-    private var mData = mutableListOf<Song>()
+    ListAdapter<Song, SongsAdapter.SongsListViewHolder>(SongDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongsListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_song, parent, false)
         return SongsListViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return mData.size
-    }
-
     override fun onBindViewHolder(holder: SongsListViewHolder, position: Int) {
-        holder.bind(mData[position])
-    }
-
-    fun updateList(list: List<Song>) {
-        if (list.isNotEmpty()) {
-            val prevCount = itemCount
-            mData.addAll(list)
-            notifyItemRangeChanged(prevCount, list.size)
-        }
-    }
-
-    fun clear() {
-        Log.d("HOLA", "Adapter cleared!")
-        mData.clear()
-        notifyDataSetChanged()
+        holder.bind(getItem(position))
     }
 
     inner class SongsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,5 +47,14 @@ class SongsAdapter(private val mListener: OnSongItemInteractor) :
             mItem.savedSong = !selected
             mListener.saveSong(mItem)
         }
+    }
+
+    class SongDiffCallback : DiffUtil.ItemCallback<Song>() {
+
+        override fun areItemsTheSame(oldItem: Song, newItem: Song) =
+            oldItem.trackId == newItem.trackId
+
+        override fun areContentsTheSame(oldItem: Song, newItem: Song) =
+            oldItem == newItem
     }
 }

@@ -1,6 +1,5 @@
 package com.scallop.awesomevibes.ui.songs
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +29,8 @@ class SongsViewModel(
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
+    private var shouldLoadMore = true
+
     private val _data = MutableLiveData<Data<List<Song>>>()
     val data: LiveData<Data<List<Song>>> get() = _data
 
@@ -41,15 +42,19 @@ class SongsViewModel(
     }
 
     fun getSongs(page: Int = 0) {
-        _data.value = Data(Status.LOADING)
-        viewModelScope.launch {
-            val results = withContext(Dispatchers.IO) {
-                mGetSongsUseCase.getSongs(mAlbumName, mAlbumId, page)
+        if (shouldLoadMore) {
+            _data.value = Data(Status.LOADING)
+            viewModelScope.launch {
+                val results = withContext(Dispatchers.IO) {
+                    mGetSongsUseCase.getSongs(mAlbumName, mAlbumId, page)
+                }
+                results.map {
+                    if (it.isEmpty()) {
+                        shouldLoadMore = false
+                    }
+                    _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
+                }.collect()
             }
-            results.map {
-                Log.d("HOLA", it.filter { it.savedSong }.size.toString())
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
-            }.collect()
         }
     }
 

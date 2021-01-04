@@ -38,17 +38,18 @@ class MusicLocalImpl(
         return mDao.getSavedSongs(albumId).map { mDataEntityMapper.mapSongToEntity(it) }
     }
 
-    suspend fun saveSong(song: SongEntity) {
+    fun saveSong(song: SongEntity) {
         mDao.insertSong(mEntityDataMapper.mapSongToData(song))
     }
 
-    suspend fun deleteSong(song: SongEntity) {
+    fun deleteSong(song: SongEntity) {
         mDao.deleteSong(mEntityDataMapper.mapSongToData(song))
     }
 
-    suspend fun getSong(songId: Int): SongEntity? {
+    fun getSong(songId: Int): SongEntity? {
         return mDao.getSavedSong(songId)?.let { mDataEntityMapper.mapSongToEntity(it) }
     }
+
     override suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity> {
         TODO("Not yet implemented")
     }

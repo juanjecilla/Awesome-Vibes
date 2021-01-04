@@ -3,7 +3,7 @@ package com.scallop.data.mappers
 import com.scallop.data.entitites.*
 import com.scallop.domain.entities.*
 
-class MusicDataEntityMapper constructor() {
+class MusicDataEntityMapper {
 
     fun mapArtistsToEntity(data: ItunesApiResponseData<ArtistData>) = ItunesApiResponseEntity(
         resultCount = data.resultCount,

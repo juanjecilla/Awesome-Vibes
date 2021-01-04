@@ -1,8 +1,8 @@
 package com.scallop.domain.repositories
 
-import com.scallop.domain.entities.*
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 
