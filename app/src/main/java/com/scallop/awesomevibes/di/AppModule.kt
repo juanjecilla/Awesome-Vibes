@@ -76,9 +76,19 @@ val mLocalModules = module {
 }
 
 val mViewModels = module {
-    viewModel { ArtistsViewModel(get(), ArtistMapper()) }
-    viewModel { AlbumsViewModel(get(), AlbumsMapper()) }
-    viewModel { SongsViewModel(get(), get(), get(), get(), SongsMapper()) }
+    viewModel { (searchArtist: String) -> ArtistsViewModel(searchArtist, get(), ArtistMapper()) }
+    viewModel { (artistName: String) -> AlbumsViewModel(artistName, get(), AlbumsMapper()) }
+    viewModel { (albumName: String, albumId: Long) ->
+        SongsViewModel(
+            albumName,
+            albumId,
+            get(),
+            get(),
+            get(),
+            get(),
+            SongsMapper()
+        )
+    }
 }
 
 

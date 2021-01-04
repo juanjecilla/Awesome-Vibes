@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SongsViewModel(
+    private val mAlbumName: String,
+    private val mAlbumId: Long,
     private val mGetSongsUseCase: GetSongsUseCase,
     private val mPlaySongUseCase: PlaySongUseCase,
     private val mGetMusicVideoUseCase: GetMusicVideoUseCase,
@@ -27,21 +29,32 @@ class SongsViewModel(
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
+    private var shouldLoadMore = true
+
     private val _data = MutableLiveData<Data<List<Song>>>()
     val data: LiveData<Data<List<Song>>> get() = _data
 
     private val _video = MutableLiveData<Data<MusicVideo>>()
     val video: LiveData<Data<MusicVideo>> get() = _video
 
-    fun getSongs(albumName: String, albumId: Long, page: Int = 0) {
-        _data.value = Data(Status.LOADING)
-        viewModelScope.launch {
-            val results = withContext(Dispatchers.IO) {
-                mGetSongsUseCase.getSongs(albumName, albumId, page)
+    init {
+        getSongs(0)
+    }
+
+    fun getSongs(page: Int = 0) {
+        if (shouldLoadMore) {
+            _data.value = Data(Status.LOADING)
+            viewModelScope.launch {
+                val results = withContext(Dispatchers.IO) {
+                    mGetSongsUseCase.getSongs(mAlbumName, mAlbumId, page)
+                }
+                results.map {
+                    if (it.isEmpty()) {
+                        shouldLoadMore = false
+                    }
+                    _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
+                }.collect()
             }
-            results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapSongs(it))
-            }.collect()
         }
     }
 

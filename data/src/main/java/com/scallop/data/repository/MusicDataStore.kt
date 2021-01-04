@@ -12,5 +12,6 @@ interface MusicDataStore {
     suspend fun getSongsFromAlbum(
         name: String, albumId: Long, page: Int = 0
     ): Flow<List<SongEntity>>
+
     suspend fun getMusicVideo(name: String, trackId: Long): Flow<MusicVideoEntity>
 }

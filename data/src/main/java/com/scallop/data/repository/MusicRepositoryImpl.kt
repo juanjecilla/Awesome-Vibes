@@ -2,8 +2,8 @@ package com.scallop.data.repository
 
 import com.scallop.domain.entities.AlbumEntity
 import com.scallop.domain.entities.ArtistEntity
+import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.entities.SongEntity
-import com.scallop.domain.entities.*
 import com.scallop.domain.repositories.MusicRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -34,11 +34,11 @@ class MusicRepositoryImpl(
     ): Flow<List<SongEntity>> {
         val remoteSongs = mRemote.getSongsFromAlbum(name, albumId, page)
         val localSongs = mLocal.getSongsFromAlbum(name, albumId)
+
         return remoteSongs.combine(localSongs) { remote, local ->
             remote.map {
-                it.apply {
-                    val result  = local.contains(it)
-                    savedSong = result
+                it.also {
+                    it.savedSong = local.any { it1 -> it.trackId == it1.trackId }
                 }
             }
         }

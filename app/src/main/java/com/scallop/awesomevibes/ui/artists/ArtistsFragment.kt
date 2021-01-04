@@ -15,18 +15,23 @@ import com.scallop.awesomevibes.entities.Artist
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import com.scallop.awesomevibes.ui.commons.OnItemClick
+import com.scallop.awesomevibes.ui.commons.visible
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
 
-    private val mViewModel: ArtistsViewModel by viewModel()
+    private val mViewModel: ArtistsViewModel by viewModel {
+        parametersOf(arguments?.let {
+            val passedArguments = ArtistsFragmentArgs.fromBundle(it)
+            passedArguments.searchName
+        })
+    }
+
     private var mBinding: FragmentArtistsBinding? = null
 
     private lateinit var mAdapter: ArtistsAdapter
     private lateinit var mLayoutManager: LinearLayoutManager
-
-    private lateinit var mSearchName: String
-
     private lateinit var mEndlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,12 +53,6 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
         super.onViewCreated(view, savedInstanceState)
         mBinding = FragmentArtistsBinding.bind(view)
 
-        arguments?.let {
-            val passedArguments = ArtistsFragmentArgs.fromBundle(it)
-            mSearchName = passedArguments.searchName
-            mViewModel.getArtists(passedArguments.searchName)
-        }
-
         mBinding?.let {
             with(it) {
                 artistList.adapter = mAdapter
@@ -63,13 +62,15 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
                     STARTING_PAGE_INDEX
                 ) {
                     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                        mViewModel.getArtists(mSearchName, page)
+                        mViewModel.getArtists(page)
                     }
                 }
                 artistList.layoutManager = mLayoutManager
                 artistList.addOnScrollListener(mEndlessRecyclerViewScrollListener)
             }
         }
+
+        mAdapter.clear()
 
         mViewModel.data.observe(viewLifecycleOwner, {
             when (it.responseType) {
@@ -78,7 +79,9 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
                 }
                 Status.SUCCESSFUL -> {
                     mBinding?.progressBar?.let { it1 -> showProgressBar(it1, false) }
-                    it.data?.let { it1 -> mAdapter.updateList(it1) }
+                    it.data?.let { it1 ->
+                        updateList(it1)
+                    }
                 }
                 Status.ERROR -> {
                     Log.d("", "")
@@ -97,6 +100,18 @@ class ArtistsFragment : BaseFragment(), OnItemClick<Artist> {
         action.searchArtist = item.artistName
         val navController = view?.findNavController()
         navController?.navigate(action)
+    }
+
+    private fun updateList(items: List<Artist>) {
+        mAdapter.updateList(items)
+
+        if (mAdapter.itemCount == 0) {
+            mBinding?.emptyLabel?.visible(true)
+            mBinding?.artistList?.visible(false)
+        } else {
+            mBinding?.emptyLabel?.visible(false)
+            mBinding?.artistList?.visible(true)
+        }
     }
 
     companion object {
