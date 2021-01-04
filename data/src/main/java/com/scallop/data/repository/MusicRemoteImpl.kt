@@ -55,11 +55,15 @@ class MusicRemoteImpl constructor(private val mApi: ItunesApi) : MusicDataStore 
     override suspend fun getMusicVideo(
         name: String,
         trackId: Long
-    ): Flow<MusicVideoEntity> {
+    ): Flow<MusicVideoEntity?> {
         val result = mApi.getMusicVideo(name)
         return flow {
             result.body()?.let {
-                emit(mMapper.mapMusicVideoToEntity(it.results[0]))
+                if (it.results.isNotEmpty()){
+                    emit(mMapper.mapMusicVideoToEntity(it.results[0]))
+                } else {
+                    emit(null)
+                }
             }
         }
     }

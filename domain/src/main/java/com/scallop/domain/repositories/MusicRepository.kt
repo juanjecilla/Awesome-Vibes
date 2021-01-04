@@ -31,5 +31,5 @@ interface MusicRepository {
     suspend fun getMusicVideo(
         name: String,
         trackId: Long
-    ): Flow<MusicVideoEntity>
+    ): Flow<MusicVideoEntity?>
 }

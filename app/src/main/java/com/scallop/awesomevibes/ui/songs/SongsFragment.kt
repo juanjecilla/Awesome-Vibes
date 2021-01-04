@@ -1,7 +1,6 @@
 package com.scallop.awesomevibes.ui.songs
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.common.BaseFragment
 import com.scallop.awesomevibes.databinding.FragmentSongsBinding
@@ -104,7 +104,6 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                     it.data?.let { it1 -> updateList(it1) }
                 }
                 Status.ERROR -> {
-                    Log.d("", "")
                 }
             }
         })
@@ -119,7 +118,7 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
                     it.data?.let { it1 -> showMusicVideo(it1) }
                 }
                 Status.ERROR -> {
-                    Log.d("", "")
+                    showVideoError()
                 }
             }
         })
@@ -156,6 +155,12 @@ class SongsFragment : BaseFragment(), OnSongItemInteractor {
         action.mediaName = musicVideo.trackName
         val navController = view?.findNavController()
         navController?.navigate(action)
+    }
+
+    private fun showVideoError() {
+        mBinding?.root?.let {
+            Snackbar.make(it, R.string.video_not_found, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
