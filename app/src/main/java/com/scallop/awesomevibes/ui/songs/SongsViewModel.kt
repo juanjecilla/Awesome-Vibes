@@ -60,7 +60,7 @@ class SongsViewModel(
 
     fun saveSong(song: Song) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 if (song.savedSong) {
                     mSaveSongUseCase.saveSong(mMapper.mapSong(song))
                 } else {

@@ -13,9 +13,7 @@ import com.scallop.data.db.MusicDatabase
 import com.scallop.data.managers.MusicPlayerImpl
 import com.scallop.data.mappers.MusicDataEntityMapper
 import com.scallop.data.mappers.MusicEntityDataMapper
-import com.scallop.data.repository.MusicLocalImpl
-import com.scallop.data.repository.MusicRemoteImpl
-import com.scallop.data.repository.MusicRepositoryImpl
+import com.scallop.data.repository.*
 import com.scallop.domain.repositories.MusicPlayer
 import com.scallop.domain.repositories.MusicRepository
 import com.scallop.domain.usecases.*
@@ -24,18 +22,17 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
+@Suppress("USELESS_CAST") // It is important to maintain the dependency tree
 val mRepositoryModules = module {
-    single { MusicRemoteImpl(get()) }
-    single { MusicLocalImpl(get(), MusicDataEntityMapper(), MusicEntityDataMapper()) }
+    single { MusicRemoteImpl(get()) as RemoteDataSource}
+    single { MusicLocalImpl(get(), MusicDataEntityMapper(), MusicEntityDataMapper()) as LocalDataSource}
     single {
-        @Suppress("USELESS_CAST") // It is important to maintain the dependency tree
         MusicRepositoryImpl(
             get(),
             get()
         ) as MusicRepository
     }
     single {
-        @Suppress("USELESS_CAST") // It is important to maintain the dependency tree
         MusicPlayerImpl(
             get()
         ) as MusicPlayer
