@@ -23,14 +23,14 @@ class MusicDataEntityMapper {
         wrapperType = data.wrapperType
     )
 
-    fun mapToEntity(data: ItunesApiResponseData<AlbumData>) = ItunesApiResponseEntity(
+    fun mapAlbumToEntity(data: ItunesApiResponseData<AlbumData>) = ItunesApiResponseEntity(
         resultCount = data.resultCount,
-        results = mapToEntity(data.results)
+        results = mapAlbumToEntity(data.results)
     )
 
-    fun mapToEntity(results: List<AlbumData>) = results.map { mapToEntity(it) }
+    fun mapAlbumToEntity(results: List<AlbumData>) = results.map { mapAlbumToEntity(it) }
 
-    fun mapToEntity(data: AlbumData) = AlbumEntity(
+    fun mapAlbumToEntity(data: AlbumData) = AlbumEntity(
         amgArtistId = data.amgArtistId,
         artistId = data.artistId,
         artistName = data.artistName,

@@ -1,0 +1,6 @@
+{
+ "resultCount":1,
+ "results": [
+{"wrapperType":"track", "kind":"music-video", "artistId":128173834, "trackId":439672238, "artistName":"El Chojin", "trackName":"Unete a Mi Bando", "trackCensoredName":"Unete a Mi Bando", "artistViewUrl":"https://music.apple.com/us/artist/el-chojin/128173834?uo=4", "trackViewUrl":"https://music.apple.com/us/music-video/unete-a-mi-bando/439672238?uo=4", 
+"previewUrl":"https://video-ssl.itunes.apple.com/itunes-assets/Video115/v4/06/bd/b1/06bdb1a3-8a1a-629c-08ca-79cbe0bdff92/mzvf_1994764191849482023.640x338.h264lc.U.p.m4v", "artworkUrl30":"https://is3-ssl.mzstatic.com/image/thumb/Video118/v4/bf/b6/97/bfb69761-f92d-4f26-bd5f-6453ea9e0144/source/30x30bb.jpg", "artworkUrl60":"https://is3-ssl.mzstatic.com/image/thumb/Video118/v4/bf/b6/97/bfb69761-f92d-4f26-bd5f-6453ea9e0144/source/60x60bb.jpg", "artworkUrl100":"https://is3-ssl.mzstatic.com/image/thumb/Video118/v4/bf/b6/97/bfb69761-f92d-4f26-bd5f-6453ea9e0144/source/100x100bb.jpg", "collectionPrice":1.99, "trackPrice":1.99, "releaseDate":"2011-05-30T07:00:00Z", "collectionExplicitness":"notExplicit", "trackExplicitness":"notExplicit", "trackTimeMillis":224617, "country":"USA", "currency":"USD", "primaryGenreName":"Latin"}]
+}

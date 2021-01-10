@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class MusicRepositoryImpl(
-    private val mRemote: MusicRemoteImpl,
-    private val mLocal: MusicLocalImpl
+    private val mRemote: RemoteDataSource,
+    private val mLocal: LocalDataSource
 ) : MusicRepository {
 
     override suspend fun getArtistsByName(
@@ -33,8 +33,7 @@ class MusicRepositoryImpl(
         page: Int
     ): Flow<List<SongEntity>> {
         val remoteSongs = mRemote.getSongsFromAlbum(name, albumId, page)
-        val localSongs = mLocal.getSongsFromAlbum(name, albumId)
-
+        val localSongs = mLocal.getSongsFromAlbum(albumId)
         return remoteSongs.combine(localSongs) { remote, local ->
             remote.map {
                 it.also {

@@ -10,61 +10,49 @@ import com.scallop.domain.entities.SongEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class MusicRemoteImpl constructor(private val mApi: ItunesApi) : MusicDataStore {
+class MusicRemoteImpl constructor(private val mApi: ItunesApi) : RemoteDataSource {
 
     private val mMapper = MusicDataEntityMapper()
 
     override suspend fun getArtistsByName(
         name: String,
         page: Int
-    ): Flow<List<ArtistEntity>> {
+    ): Flow<List<ArtistEntity>> = flow {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getArtistsByName(name, offset)
-        return flow {
-            result.body()?.let { emit(mMapper.mapArtistsToEntity(it.results)) }
-        }
+        emit(mMapper.mapArtistsToEntity(result.results))
     }
 
     override suspend fun getAlbumsFromArtist(
         name: String,
         page: Int
-    ): Flow<List<AlbumEntity>> {
+    ): Flow<List<AlbumEntity>> = flow {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getAlbumsFromArtist(name, offset)
-        return flow {
-            result.body()?.let { emit(mMapper.mapToEntity(it.results)) }
-        }
+        emit(mMapper.mapAlbumToEntity(result.results))
     }
 
     override suspend fun getSongsFromAlbum(
         name: String,
         albumId: Long,
         page: Int
-    ): Flow<List<SongEntity>> {
+    ): Flow<List<SongEntity>> = flow {
         val offset = page * Properties.ITEMS_PER_PAGE
         val result = mApi.getSongsFromAlbum(name, offset)
 
-        return flow {
-            result.body()?.let {
-                val validResults = it.results.filter { it1 -> it1.collectionId == albumId }
-                emit(mMapper.mapSongToEntity(validResults))
-            }
-        }
+        val validResults = result.results.filter { it1 -> it1.collectionId == albumId }
+        emit(mMapper.mapSongToEntity(validResults))
     }
 
     override suspend fun getMusicVideo(
         name: String,
         trackId: Long
-    ): Flow<MusicVideoEntity?> {
+    ): Flow<MusicVideoEntity?> = flow {
         val result = mApi.getMusicVideo(name)
-        return flow {
-            result.body()?.let {
-                if (it.results.isNotEmpty()){
-                    emit(mMapper.mapMusicVideoToEntity(it.results[0]))
-                } else {
-                    emit(null)
-                }
-            }
+        if (result.results.isNotEmpty()) {
+            emit(mMapper.mapMusicVideoToEntity(result.results[0]))
+        } else {
+            emit(null)
         }
     }
 }

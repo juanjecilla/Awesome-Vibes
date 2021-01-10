@@ -10,34 +10,30 @@ import retrofit2.http.Query
 interface ItunesApi {
 
     @GET("/search?entity=musicArtist")
-    @Headers("Accept: application/json")
     suspend fun getArtistsByName(
         @Query("term") name: String,
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
-    ): Response<ItunesApiResponseData<ArtistData>>
+    ): ItunesApiResponseData<ArtistData>
 
     @GET("/search?entity=album")
-    @Headers("Accept: application/json")
     suspend fun getAlbumsFromArtist(
         @Query("term") name: String,
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
-    ): Response<ItunesApiResponseData<AlbumData>>
+    ): ItunesApiResponseData<AlbumData>
 
     @GET("/search?entity=song&attribute=albumTerm")
-    @Headers("Accept: application/json")
     suspend fun getSongsFromAlbum(
         @Query("term") name: String,
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
-    ): Response<ItunesApiResponseData<SongData>>
+    ): ItunesApiResponseData<SongData>
 
     @GET("/search?entity=musicVideo&attribute=songTerm")
-    @Headers("Accept: application/json")
     suspend fun getMusicVideo(
         @Query("term") name: String,
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = Properties.ITEMS_PER_PAGE
-    ): Response<ItunesApiResponseData<MusicVideoData>>
+    ): ItunesApiResponseData<MusicVideoData>
 }
