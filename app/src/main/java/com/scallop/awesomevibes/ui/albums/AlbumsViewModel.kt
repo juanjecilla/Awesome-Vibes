@@ -32,9 +32,7 @@ class AlbumsViewModel(
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                val params = HashMap<String, Any>()
-                params["name"] = mArtistName
-                params["page"] = page
+                val params = GetAlbumsUseCase.Params(mArtistName, page)
                 mUseCase(params)
             }
             results.map {

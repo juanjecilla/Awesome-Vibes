@@ -11,7 +11,6 @@ import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.SongsMapper
 import com.scallop.domain.usecases.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -46,11 +45,7 @@ class SongsViewModel(
             _data.value = Data(Status.LOADING)
             viewModelScope.launch {
                 val results = withContext(Dispatchers.IO) {
-                    val params = HashMap<String, Any>()
-                    params["name"] = mAlbumName
-                    params["albumId"] = mAlbumId
-                    params["page"] = page
-
+                    val params = GetSongsUseCase.Params(mAlbumName, mAlbumId, page)
                     mGetSongsUseCase(params)
                 }
                 results.map {
@@ -90,10 +85,7 @@ class SongsViewModel(
     fun getMusicVideo(trackName: String, trackId: Long) {
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                val params = HashMap<String, Any>()
-                params["name"] = trackName
-                params["trackId"] = trackId
-
+                val params = GetMusicVideoUseCase.Params(trackName, trackId)
                 mGetMusicVideoUseCase(params)
             }
             results.map {

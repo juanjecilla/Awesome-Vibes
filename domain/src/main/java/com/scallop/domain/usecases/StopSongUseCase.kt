@@ -5,7 +5,7 @@ import com.scallop.domain.repositories.MusicPlayer
 
 class StopSongUseCase(
     private val mMusicPlayer: MusicPlayer
-): BaseUseCase<Unit?, Unit> {
+) : BaseUseCase<Unit?, Unit> {
 
     override suspend fun invoke(params: Unit?) {
         mMusicPlayer.stopSong()

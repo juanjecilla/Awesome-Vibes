@@ -7,9 +7,13 @@ import kotlinx.coroutines.flow.Flow
 
 class GetMusicVideoUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<HashMap<String, Any>, Flow<MusicVideoEntity?>> {
+) : BaseUseCase<GetMusicVideoUseCase.Params, Flow<MusicVideoEntity?>> {
 
-    override suspend fun invoke(params: HashMap<String, Any>) =
-        mRepository.getMusicVideo(params["name"] as String, params["trackId"] as Long)
+    override suspend fun invoke(params: Params) =
+        mRepository.getMusicVideo(params.name, params.trackId)
 
+    data class Params(
+        val name: String,
+        val trackId: Long
+    )
 }

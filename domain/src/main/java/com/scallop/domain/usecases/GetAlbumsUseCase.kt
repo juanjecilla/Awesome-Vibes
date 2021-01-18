@@ -7,8 +7,13 @@ import kotlinx.coroutines.flow.Flow
 
 class GetAlbumsUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<HashMap<String, Any>, Flow<List<AlbumEntity>>> {
+) : BaseUseCase<GetAlbumsUseCase.Params, Flow<List<AlbumEntity>>> {
 
-    override suspend fun invoke(params: HashMap<String, Any>) =
-        mRepository.getAlbumsFromArtist(params["name"] as String, params["page"] as Int)
+    override suspend fun invoke(params: Params) =
+        mRepository.getAlbumsFromArtist(params.name, params.page)
+
+    data class Params(
+        val name: String,
+        val page: Int
+    )
 }
