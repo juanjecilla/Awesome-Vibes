@@ -9,11 +9,9 @@ import com.scallop.awesomevibes.entities.MusicVideo
 import com.scallop.awesomevibes.entities.Song
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.mappers.SongsMapper
-import com.scallop.domain.usecases.GetMusicVideoUseCase
-import com.scallop.domain.usecases.GetSongsUseCase
-import com.scallop.domain.usecases.PlaySongUseCase
-import com.scallop.domain.usecases.SaveSongUseCase
+import com.scallop.domain.usecases.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -24,8 +22,10 @@ class SongsViewModel(
     private val mAlbumId: Long,
     private val mGetSongsUseCase: GetSongsUseCase,
     private val mPlaySongUseCase: PlaySongUseCase,
+    private val mStopSongUseCase: StopSongUseCase,
     private val mGetMusicVideoUseCase: GetMusicVideoUseCase,
     private val mSaveSongUseCase: SaveSongUseCase,
+    private val mDeleteSongUseCase: DeleteSongUseCase,
     private val mMapper: SongsMapper
 ) : ViewModel() {
 
@@ -46,7 +46,12 @@ class SongsViewModel(
             _data.value = Data(Status.LOADING)
             viewModelScope.launch {
                 val results = withContext(Dispatchers.IO) {
-                    mGetSongsUseCase.getSongs(mAlbumName, mAlbumId, page)
+                    val params = HashMap<String, Any>()
+                    params["name"] = mAlbumName
+                    params["albumId"] = mAlbumId
+                    params["page"] = page
+
+                    mGetSongsUseCase(params)
                 }
                 results.map {
                     if (it.isEmpty()) {
@@ -62,26 +67,34 @@ class SongsViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (song.savedSong) {
-                    mSaveSongUseCase.saveSong(mMapper.mapSong(song))
+                    mSaveSongUseCase(mMapper.mapSong(song))
                 } else {
-                    mSaveSongUseCase.deleteSong(mMapper.mapSong(song))
+                    mDeleteSongUseCase(mMapper.mapSong(song))
                 }
             }
         }
     }
 
     fun playSong(url: String) {
-        mPlaySongUseCase.playSong(url)
+        viewModelScope.launch {
+            mPlaySongUseCase(url)
+        }
     }
 
     fun stopSong() {
-        mPlaySongUseCase.stopSong()
+        viewModelScope.launch {
+            mStopSongUseCase(null)
+        }
     }
 
     fun getMusicVideo(trackName: String, trackId: Long) {
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mGetMusicVideoUseCase.getMusicVideo(trackName, trackId)
+                val params = HashMap<String, Any>()
+                params["name"] = trackName
+                params["trackId"] = trackId
+
+                mGetMusicVideoUseCase(params)
             }
             results.map {
                 it?.let {

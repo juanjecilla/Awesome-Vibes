@@ -24,8 +24,14 @@ import retrofit2.Retrofit
 
 @Suppress("USELESS_CAST") // It is important to maintain the dependency tree
 val mRepositoryModules = module {
-    single { MusicRemoteImpl(get()) as RemoteDataSource}
-    single { MusicLocalImpl(get(), MusicDataEntityMapper(), MusicEntityDataMapper()) as LocalDataSource}
+    single { MusicRemoteImpl(get()) as RemoteDataSource }
+    single {
+        MusicLocalImpl(
+            get(),
+            MusicDataEntityMapper(),
+            MusicEntityDataMapper()
+        ) as LocalDataSource
+    }
     single {
         MusicRepositoryImpl(
             get(),
@@ -44,8 +50,10 @@ val mUseCaseModules = module {
     factory { GetAlbumsUseCase(get()) }
     factory { GetSongsUseCase(get()) }
     factory { PlaySongUseCase(get()) }
+    factory { StopSongUseCase(get()) }
     factory { GetMusicVideoUseCase(get()) }
     factory { SaveSongUseCase(get()) }
+    factory { DeleteSongUseCase(get()) }
 }
 
 val mNetworkModules = module {
@@ -79,6 +87,8 @@ val mViewModels = module {
         SongsViewModel(
             albumName,
             albumId,
+            get(),
+            get(),
             get(),
             get(),
             get(),

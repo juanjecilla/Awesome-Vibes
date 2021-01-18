@@ -1,3 +1,5 @@
 package com.scallop.domain.common
 
-abstract class BaseUseCase<T>
+interface BaseUseCase<in Parameter, out Result> {
+    suspend operator fun invoke(params: Parameter): Result
+}
