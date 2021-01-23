@@ -25,8 +25,8 @@ class GetArtistsUseCaseTest {
         val repository =
             MusicRepositoryImpl(FakeRemoteDataSource(fakeArtists), FakeLocalDataSource())
         val useCase = GetArtistsUseCase(repository)
-
-        useCase.getArtists("a", 0).collect {
+        val params = GetArtistsUseCase.Params("a", 0)
+        useCase(params).collect {
             assert(it == fakeArtists)
         }
     }

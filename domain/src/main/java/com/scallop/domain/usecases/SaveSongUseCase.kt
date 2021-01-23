@@ -4,9 +4,11 @@ import com.scallop.domain.common.BaseUseCase
 import com.scallop.domain.entities.SongEntity
 import com.scallop.domain.repositories.MusicRepository
 
+typealias SaveSongBaseUseCase = BaseUseCase<SongEntity, Unit>
+
 class SaveSongUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<SongEntity, Unit> {
+) : SaveSongBaseUseCase {
 
     override suspend fun invoke(params: SongEntity) {
         mRepository.saveSong(params)

@@ -5,9 +5,11 @@ import com.scallop.domain.entities.MusicVideoEntity
 import com.scallop.domain.repositories.MusicRepository
 import kotlinx.coroutines.flow.Flow
 
+typealias GetMusicVideoBaseUseCase = BaseUseCase<GetMusicVideoUseCase.Params, Flow<MusicVideoEntity?>>
+
 class GetMusicVideoUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<GetMusicVideoUseCase.Params, Flow<MusicVideoEntity?>> {
+) : GetMusicVideoBaseUseCase {
 
     override suspend fun invoke(params: Params) =
         mRepository.getMusicVideo(params.name, params.trackId)

@@ -5,9 +5,11 @@ import com.scallop.domain.entities.SongEntity
 import com.scallop.domain.repositories.MusicRepository
 import kotlinx.coroutines.flow.Flow
 
+typealias GetSongsBaseUseCase = BaseUseCase<GetSongsUseCase.Params, Flow<List<SongEntity>>>
+
 class GetSongsUseCase(
     private val mRepository: MusicRepository
-) : BaseUseCase<GetSongsUseCase.Params, Flow<List<SongEntity>>> {
+) : GetSongsBaseUseCase {
 
     override suspend fun invoke(params: Params) =
         mRepository.getSongsFromAlbum(params.name, params.albumId, params.page)
