@@ -1,10 +1,8 @@
 package com.scallop.awesomevibes.common
 
 object Properties {
-    const val EXTRA_MOVIE = "EXTRA_MOVIE"
-    const val EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID"
-    const val FRAGMENT_TAG_LIST_HOME = "FRAGMENT_TAG_LIST_HOME"
-
-    const val ITEMS_PER_PAGE = 20
+    const val MAX_SECONDS_VALID_CACHE: Int = 60
+    const val CACHE_SIZE_BYTES: Long = 10 * 1024 * 1024
+    const val NETWORK_CLIENT_TIMEOUT: Long = 120
 }
 

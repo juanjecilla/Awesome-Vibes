@@ -35,6 +35,11 @@ class ArtistsAdapter(private val mListener: OnItemClick<Artist>) :
         }
     }
 
+    fun clear() {
+        mData.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ArtistsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private lateinit var mItem: Artist

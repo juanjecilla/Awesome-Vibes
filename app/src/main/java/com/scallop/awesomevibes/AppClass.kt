@@ -18,9 +18,11 @@ class AppClass : Application() {
             modules(
                 listOf(
                     mNetworkModules,
+                    mLocalModules,
                     mViewModels,
                     mRepositoryModules,
                     mUseCaseModules,
+                    mOtherModules,
                 )
             )
         }

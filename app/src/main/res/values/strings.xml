@@ -2,6 +2,13 @@
     <string name="app_name">Awesome Vibes</string>
     <string name="base_url_service">https://itunes.apple.com/</string>
     <string name="next_label">Next</string>
-    <string name="search_label">Search your favourite artsist</string>
-    <string name="search_hint">Rolling Stones</string>
+    <string name="search_hint">The Rolling Stones</string>
+    <string name="search_label">Artist or group</string>
+    <string name="share_label">Share</string>
+    <string name="play_label">Play song preview</string>
+    <string name="search_video_label">Search video preview</string>
+    <string name="fav_description">Save favourite</string>
+    <string name="empty_search">Sorry, we need something to search...</string>
+    <string name="empty_label">No results!</string>
+    <string name="video_not_found">Sorry... There is no video available</string>
 </resources>

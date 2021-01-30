@@ -5,7 +5,7 @@ import com.scallop.domain.entities.ArtistEntity
 
 class ArtistMapper {
 
-    fun mapArtist(artists: List<ArtistEntity>) = artists.map { mapArtist(it) }
+    fun mapArtist(artists: List<ArtistEntity>?) = artists?.map { mapArtist(it) }
 
     private fun mapArtist(artist: ArtistEntity) = Artist(
         artistId = artist.artistId,

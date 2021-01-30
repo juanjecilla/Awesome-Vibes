@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ArtistsViewModel(
+    private var mSearchArtist: String,
     private val mUseCase: GetArtistsUseCase,
     private val mMapper: ArtistMapper
 ) : ViewModel() {
@@ -23,15 +24,19 @@ class ArtistsViewModel(
     private val _data = MutableLiveData<Data<List<Artist>>>()
     val data: LiveData<Data<List<Artist>>> get() = _data
 
+    init {
+        getArtists(0)
+    }
 
-    fun getArtists(searchName: String, page: Int = 0) {
+    fun getArtists(page: Int = 0) {
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getArtists(searchName, page)
+                val params = GetArtistsUseCase.Params(mSearchArtist, page)
+                mUseCase(params)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapArtist(it.results))
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapArtist(it))
             }.collect()
         }
     }

@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.scallop.awesomevibes.R
 import com.scallop.awesomevibes.databinding.FragmentSearchBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.scallop.awesomevibes.ui.commons.hideKeyboard
+import com.scallop.awesomevibes.ui.commons.on
 
 class SearchFragment : Fragment() {
 
-    private val mViewModel: SearchViewModel by viewModel()
     private var mBinding: FragmentSearchBinding? = null
 
     override fun onCreateView(
@@ -31,6 +33,7 @@ class SearchFragment : Fragment() {
         mBinding?.let {
             with(it) {
                 next.setOnClickListener { _ -> searchArtist(it.searchBar.text.toString()) }
+                searchBar.on(EditorInfo.IME_ACTION_DONE) { searchArtist(it.searchBar.text.toString()) }
             }
         }
     }
@@ -41,9 +44,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchArtist(name: String) {
-        val action = SearchFragmentDirections.searchArtist()
-        action.searchName = name
-        val navController = view?.findNavController()
-        navController?.navigate(action)
+        if (name.isNotEmpty()) {
+            val action = SearchFragmentDirections.searchArtist()
+            action.searchName = name
+            val navController = view?.findNavController()
+            navController?.navigate(action)
+        } else {
+            mBinding?.root?.let {
+                Snackbar.make(it, R.string.empty_search, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        hideKeyboard()
     }
 }

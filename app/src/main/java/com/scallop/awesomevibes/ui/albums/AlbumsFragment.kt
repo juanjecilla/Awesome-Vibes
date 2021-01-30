@@ -15,18 +15,23 @@ import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Status
 import com.scallop.awesomevibes.ui.commons.EndlessRecyclerViewScrollListener
 import com.scallop.awesomevibes.ui.commons.OnItemClick
+import com.scallop.awesomevibes.ui.commons.visible
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
 
-    private val mViewModel: AlbumsViewModel by viewModel()
+    private val mViewModel: AlbumsViewModel by viewModel {
+        parametersOf(arguments?.let {
+            val passedArguments = AlbumsFragmentArgs.fromBundle(it)
+            passedArguments.searchArtist
+        })
+    }
+
     private var mBinding: FragmentAlbumsBinding? = null
 
     private lateinit var mAdapter: AlbumsAdapter
-
-    private lateinit var mArtistName: String
     private lateinit var mLayoutManager: LinearLayoutManager
-
     private lateinit var mEndlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +53,7 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
         super.onViewCreated(view, savedInstanceState)
         mBinding = FragmentAlbumsBinding.bind(view)
 
-        arguments?.let {
-            val passedArguments = AlbumsFragmentArgs.fromBundle(it)
-            mArtistName = passedArguments.searchArtist
-            mViewModel.getAlbums(passedArguments.searchArtist)
-        }
+        mAdapter.clear()
 
         mBinding?.let {
             with(it) {
@@ -62,7 +63,7 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
                     STARTING_PAGE_INDEX
                 ) {
                     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                        mViewModel.getAlbums(mArtistName, page)
+                        mViewModel.getAlbums(page)
                     }
                 }
                 albumList.adapter = mAdapter
@@ -78,7 +79,7 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
                 }
                 Status.SUCCESSFUL -> {
                     mBinding?.progressBar?.let { it1 -> showProgressBar(it1, false) }
-                    it.data?.let { it1 -> mAdapter.updateList(it1) }
+                    it.data?.let { it1 -> updateList(it1) }
                 }
                 Status.ERROR -> {
                     Log.d("", "")
@@ -98,6 +99,18 @@ class AlbumsFragment : BaseFragment(), OnItemClick<Album> {
         action.searchAlbumId = item.collectionId
         val navController = view?.findNavController()
         navController?.navigate(action)
+    }
+
+    private fun updateList(items: List<Album>) {
+        mAdapter.updateList(items)
+
+        if (mAdapter.itemCount == 0) {
+            mBinding?.emptyLabel?.visible(true)
+            mBinding?.albumList?.visible(false)
+        } else {
+            mBinding?.emptyLabel?.visible(false)
+            mBinding?.albumList?.visible(true)
+        }
     }
 
     companion object {

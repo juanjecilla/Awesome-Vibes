@@ -31,5 +31,6 @@ data class Song(
     val trackPrice: Double,
     val trackTimeMillis: Int,
     val trackViewUrl: String,
-    val wrapperType: String
+    val wrapperType: String,
+    var savedSong: Boolean = false
 )

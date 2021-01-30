@@ -2,8 +2,8 @@ package com.scallop.awesomevibes.ui.albums
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.scallop.awesomevibes.common.BaseViewModel
 import com.scallop.awesomevibes.entities.Album
 import com.scallop.awesomevibes.entities.Data
 import com.scallop.awesomevibes.entities.Status
@@ -16,21 +16,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlbumsViewModel(
+    private val mArtistName: String,
     private val mUseCase: GetAlbumsUseCase,
     private val mMapper: AlbumsMapper
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _data = MutableLiveData<Data<List<Album>>>()
     val data: LiveData<Data<List<Album>>> get() = _data
 
-    fun getAlbums(searchName: String, page: Int = 0) {
+    init {
+        getAlbums(0)
+    }
+
+    fun getAlbums(page: Int = 0) {
         _data.value = Data(Status.LOADING)
         viewModelScope.launch {
             val results = withContext(Dispatchers.IO) {
-                mUseCase.getAlbums(searchName, page)
+                val params = GetAlbumsUseCase.Params(mArtistName, page)
+                mUseCase(params)
             }
             results.map {
-                _data.value = Data(Status.SUCCESSFUL, mMapper.mapAlbum(it.results))
+                _data.value = Data(Status.SUCCESSFUL, mMapper.mapAlbum(it))
             }.collect()
         }
     }
