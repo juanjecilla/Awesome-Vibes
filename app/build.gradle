@@ -72,6 +72,9 @@ dependencies {
     implementation "org.koin:koin-android:2.2.1"
 
     implementation("io.coil-kt:coil:1.1.0")
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
 
     testImplementation("junit:junit:4.13.1")
     testImplementation("org.mockito:mockito-core:3.1.0")
